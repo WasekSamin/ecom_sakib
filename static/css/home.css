@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.banners {
+    padding-top: 45px;
+}
+
+.banner-1, .banner-2 {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.cat {
+    margin-bottom: 30px;
+}
+
+.cat-row {
+    display: grid;
+    grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5%;
+}
+
+.cat-cards {
+    width: 100%;
+    border: 1px solid #DFDFDF;
+}
+
+.cat-images img {
+    padding: 10px;
+    max-width: 100%;
+    height: 85px;
+    display: block;
+    margin: auto;
+    object-fit: contain;
+}
+
+.cat-title {
+    word-wrap: break-word;
+}
+
+.slick-next:focus, .slick-next:hover, .slick-prev:focus, .slick-prev:hover, .slick-arrow.slick-next, .slick-arrow.slick-prev {
+    z-index: 1!important;
+}
+
+.slick-prev:before {
+    color: #C82333!important;
+  }
+  .slick-next:before {
+    color: #C82333!important;
+  }
+
+.prod-row {
+    display: grid;
+    grid-template-columns: 15.92% 15.92% 15.92% 15.92% 15.92% 15.92%;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+.prod-cards {
+    width: 100%;
+    border: 1px solid #DFDFDF;
+}
+
+.prod-images img {
+    padding: 10px;
+    max-width: 100%;
+    height: 180px;
+    display: block;
+    margin: auto;
+    object-fit: contain;
+}
+
+.top-prod-link {
+    margin-top: 35px;
+}
+
+.top-prod-link a:hover {
+    text-decoration: none;
+    color: #F26F67;
+}
+
+.heart {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+}
+
+.fa-heart {
+    font-size: 19px;
+    cursor: pointer;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 1199px) {
+    .prod-row {
+        grid-template-columns: 15.78% 15.78% 15.78% 15.78% 15.78% 15.78%;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .cat-row {
+        grid-template-columns: 16.7% 16.7% 16.7% 16.7% 16.7% 16.7%;
+    }
+
+    .prod-row {
+        grid-template-columns: 23.9% 23.9% 23.9% 23.9%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .cat-row {
+        grid-template-columns: 20.1% 20.1% 20.1% 20.1% 20.1%;
+    }
+
+    .prod-row {
+        grid-template-columns: 32% 32% 32%;
+    }
+
+    .banner-1, .banner-2 {
+        height: 250px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .cat-row {
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+
+    .cat-title {
+        font-size: 14px;
+    }
+
+    .prod-row {
+        grid-template-columns: 48.8% 48.8%;
+    }
+
+    .slick-next {
+        right: 0!important;
+    }
+
+    .slick-prev {
+        left: 0!important;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .cat-row {
+        grid-template-columns: 33.3% 33.3% 33.3%;
+    }
+}

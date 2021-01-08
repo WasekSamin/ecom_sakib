@@ -1,0 +1,583 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+    integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+    crossorigin="anonymous"></script>
+  <title>E-commerce</title>
+  <link rel="shortcut icon" type="image/png" href="image/favicon.png">
+</head>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: auto;
+    background-color: #e6e6e6;
+  }
+
+  .header {
+    overflow: hidden;
+    background-color: red;
+    padding: 35px;
+  }
+
+  .bootbutton {
+    background-color: transparent;
+    border: none;
+  }
+
+  .login a {
+    text-decoration: none;
+    text-align: center;
+  }
+
+  /* login and sign up button */
+
+  .btn {
+    cursor: pointer;
+    float: right;
+    position: relative;
+    bottom: 30px;
+    color: #ffffff;
+  }
+
+  .search-box {
+    width: 580px;
+    height: 36px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    left: 387px;
+    border-radius: 3px;
+    justify-content: center;
+    transform: translateY(45%);
+
+  }
+
+  .searchinput {
+    width: 100%;
+    border-style: none;
+    outline: none;
+  }
+
+  .searchbutton {
+    background-color: red;
+    border-style: none;
+    padding: 6px;
+    position: relative;
+    left: 5px;
+  }
+
+  a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  /* shopping cart icon */
+  .fa-shopping-cart {
+    float: right;
+    position: relative;
+    left: 148px;
+    color: #ffffff;
+  }
+
+  .banner {
+    margin-top: 40px;
+    background-color: #ffffff;
+  }
+
+  .banner1 img {
+    width: 600px;
+    height: 250px;
+    position: relative;
+    left: 200px;
+  }
+
+  .banner2 img {
+    width: 500px;
+    height: 125px;
+    position: relative;
+    right: 200px;
+    padding-top: 0px;
+  }
+
+  .category {
+    width: 100%;
+    padding-right: 20px;
+    background-color: #ffffff;
+    padding: 11px;
+  }
+
+  .link {
+    color: black;
+  }
+
+  .top-product,
+  .New-Product,
+  .all-product {
+    padding: 15px;
+    width: 75%;
+    margin: auto;
+    background-color: #ffffff;
+  }
+
+  .all {
+    float: right;
+  }
+
+  /* category product item row */
+  .rrr {
+    padding-top: 2px;
+  }
+
+  /* category product item column */
+  .ccc {
+    background-color: #ffffff;
+    border: 1px solid #e6e6e6;
+  }
+
+  .ccc .image a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .ccc .image img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .image p {
+    font-size: 12px;
+  }
+
+  /* product grid row */
+  .product-grid {}
+
+  /* product grid column */
+  .product-gird-column {
+    padding: 2px 4px;
+  }
+
+  .product-gird-column:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .image5 {
+    background-color: #ffffff;
+  }
+
+  .image5 img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .image5 p {
+    text-align: center;
+    color: rebeccapurple;
+
+  }
+
+  .image5 a {
+    text-decoration: none;
+  }
+
+  .hover p {
+    border: 1px solid rebeccapurple;
+  }
+
+  .hover {
+    opacity: 0;
+    padding-bottom: 2px;
+  }
+
+  .product-gird-column:hover .hover {
+    opacity: 1;
+  }
+
+  .title {
+    margin: 50px;
+  }
+
+  /* checkout column */
+  .column-first,
+  .column-second {
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 10px 10px 5px #aaaaaa;
+  }
+
+  .row-checkout {
+    padding: 20px;
+  }
+
+  .payment-first {
+    border: 1px solid #e6e6e6;
+    background-color: gray;
+    padding: 21px;
+  }
+
+  .payment-second {
+    border: 1px solid #e6e6e6;
+    padding: 21px;
+  }
+
+  .fa-user {
+    font-size: 105px;
+  }
+
+  .avator,
+  .smile {
+    font-size: 25px;
+  }
+
+  .smile a {
+    text-decoration: none;
+    color: black;
+  }
+
+  /* dashboard */
+
+  .row-dashboard {
+    width: 100%;
+  }
+
+  .user-col-one {
+    margin: 20px;
+    background-color: #ffffff;
+    padding: 80px;
+    box-shadow: 10px 10px 5px #aaaaaa;
+  }
+
+  .user-col-second {
+    margin: 20px;
+    padding: 80px;
+    background-color: #ffffff;
+    box-shadow: 10px 10px 5px #aaaaaa;
+  }
+
+  .footer {
+    width: 100%;
+    margin-left: 0px;
+    background-color: #232754;
+  }
+
+  .footer-column {
+    color: #ffffff;
+    padding-top: 30px;
+    padding-left: 115px;
+  }
+
+  .footer-column a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  /* footer icon  */
+  .fa-facebook-official {
+    font-size: 50px;
+    color: blue;
+    opacity: 1;
+  }
+
+  .fa-youtube-play {
+    font-size: 50px;
+    color: red;
+    opacity: 1;
+  }
+
+  .fa-facebook-official:hover,
+  .fa-youtube-play:hover {
+    opacity: 0.6;
+  }
+</style>
+
+<body>
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Sign Up</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <!-- Registration -->
+
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Fill to the form to create your account</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="username">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="phone number">
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="password">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="confirm password">
+            </div><br>
+
+            <button type="submit" class="btn btn-danger btn-lg btn-block float-left">Register</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block float-left">Log in with Facebook</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="staticBackdrop1" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Log In</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+
+          <!-- login -->
+
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Enter your phone number and password to log in</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="username">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="password">
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+            </div><br>
+
+            <div class="login">
+              <button type="submit" class="btn btn-danger btn-lg btn-block float-left">Log In</button>
+              <a href="#">
+                <p>Lost password?</p>
+              </a>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- login and sign up button  -->
+  <div class="header">
+    <button type="button" class="btn btn-primary bootbutton" data-toggle="modal" data-target="#staticBackdrop">Sign
+      Up</button>
+    <button type="button" class="btn btn-primary bootbutton" data-toggle="modal" data-target="#staticBackdrop1">Log
+      in</button>
+
+    <!-- searchbox -->
+    <div class="search-box">
+      <input type="text" class="searchinput" placeholder="Search for products, brands and shops">
+      <button type="submit" class="searchbutton">
+        <i class="fa fa-search" aria-hidden="true"></i>
+      </button>
+    </div>
+    <a href="#"><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></a>
+  </div>
+
+  <!-- banner -->
+
+  <div class="row no-gutters banner">
+    <div class="col-sm-6 col-md-8 banner1"><img src="image/banner.jpg"></div>
+    <div class="col-6 col-md-4 banner2"><img src="image/banner.jpg"><img src="image/banner.jpg"></div>
+  </div>
+
+  <!-- category menu -->
+  <div class="container">
+    <nav class="navbar navbar-light category">
+      <a class="navbar-brand" href="#">CATEGORIES</a>
+    </nav>
+  </div>
+
+
+  <!-- here is all category product item list -->
+
+  <div class="container">
+
+    <div class="row rrr">
+      {% for cat in cats %}
+      <div class="col ccc">
+        <div class="image">
+          <a href="#">
+            <img src="{{cat.cat_image.url}}">
+            <p>{{cat.title}} <br></p>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div><br>
+
+
+  <!-- product grid -->
+
+  <div class="top-product">
+    <p>Top Product <a class="all" href="#">See All</a></p>
+  </div>
+
+  <div class="container">
+    <div class="row product-grid">
+      {% for product in products %}
+      <div class="col product-gird-column">
+        <div class="image5">
+          <a href="#">
+            <small class="badge badge-warning">50%</small>
+            <img src="{{product.image.url}}">
+            <p>{{product.name}}</p>
+          </a>
+          <div class="hover">
+            <a href="#">
+              <p>Add To Cart</p>
+              <p>Quick View</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+
+
+
+
+
+
+    </div>
+  </div><br>
+
+  <div class="New-Product">
+    <p>New Product<a class="all" href="#">See All</a></p>
+  </div>
+
+  <div class="container">
+    <div class="row product-grid">
+      {% for prods in new_prods %}
+      <div class="col product-gird-column">
+        <div class="image5">
+          <a href="#">
+            <small class="badge badge-warning">50%</small>
+            <img src="{{ prods.image.url }}">
+            <p>Avilable</p>
+          </a>
+          <div class="hover">
+            <a href="#">
+              <p>Add To Cart</p>
+              <p>Quick View</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div><br>
+
+
+
+  <div class="all-Product">
+    <p>All Product<a class="all" href="#">See All</a></p>
+  </div>
+  <div class="container">
+    <div class="row product-grid">
+      {% for product in products %}
+      <div class="col product-gird-column">
+        <div class="image5">
+          <a href="#">
+            <small class="badge badge-warning">50%</small>
+            <img src="{{ product.image.url }}">
+            <p>Avilable</p>
+          </a>
+          <div class="hover">
+            <a href="#">
+              <p>Add To Cart</p>
+              <p>Quick View</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div><br>
+
+  <!-- footer -->
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 footer">
+    <div class="col footer-column">
+      <h3>Contact Us</h3><br>
+      <i class="fa fa-phone" aria-hidden="true">***********</i><br><br>
+      <i class="fa fa-phone" aria-hidden="true">***********</i><br><br>
+      <i class="fa fa-envelope" aria-hidden="true">aaaa@gmail.com</i><br><br>
+      <i class="fa fa-times-circle" aria-hidden="true">Opening hour: 24\7</i>
+    </div>
+    <div class="col footer-column">
+      <h3>Location</h3><br>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing <br> ratione. Iste porro, ex modi animi soluta sit <br>
+        eaque error nulla neque rum reiciendis possimu0 <br> s nostrum vitae ipsam, earum, dsequi assumenda. <br> Totam,
+        doloremque ex reicien labore odio quam</p>
+    </div>
+    <div class="col footer-column">
+      <h3>Menu</h3><br>
+      <a class="fot-link" href="#">Terms & Condition</a> <br>
+      <a class="fot-link" href="#">Privacy Policy</a> <br>
+      <a class="fot-link" href="#">Return Policy</a> <br>
+      <a class="fot-link" href="#">Refund Policy</a>
+    </div>
+    <div class="col footer-column"><a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+      <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
+    </div>
+  </div>
+  </div>
+
+</body>
+
+</html>

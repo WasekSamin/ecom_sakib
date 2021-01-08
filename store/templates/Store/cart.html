@@ -1,0 +1,58 @@
+{% extends 'Store/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+
+<div class="container mb-4">
+  <h2 class="pt-5 pb-4">Shopping Cart</h2>
+  <div class="small-container cart-page">
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+          <tr>
+            <td>
+              <div class="cart-info">
+                <img src="{{ product.image.url }}" alt="">
+                <div>
+                  <p class="font-weight-bold">{{ product.name }}</p>
+                  <a href="#">Remove</a>
+                </div>
+              </div>
+            </td>
+            <td class="align-middle"><input class="text-center form-control" type="text" min="0" name="quantity" id="quantity" value="1"><span><button class="min-btn">-</button><button class="add-btn">+</button></span></td>
+            <td class="font-weight-bold align-middle">{{ product.price }} Tk</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="total-price">
+        <table class="mb-3">
+          <tr>
+            <td class="font-weight-bold">Subtotal</td>
+            <td class="font-weight-bold">100000 Tk</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold cart-total-price">TOTAL</td>
+            <td class="font-weight-bold">100000 Tk</td>
+          </tr>
+          <tr>
+            <td class="text-center" colspan="2"><a href="#"><button class="btn btn-danger">Proceed To Checkout <i class="fas fa-arrow-right"></i></button></a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
