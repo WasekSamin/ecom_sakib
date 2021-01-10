@@ -14,7 +14,7 @@ class Home(View):
         cats = Category.objects.all()
         args = {'products':products, 'cats':cats}
         return render(self.request, 'Store/home.html', args)
-    
+
     def post(self, request):
         product = request.POST.get('product')
         cart = request.session.get('cart')
@@ -44,8 +44,8 @@ class Product_details(View):
         pd = Product.objects.get(slug=slug)
         args = {}
         return render(self.request, 'Store/product_details.html', args)
-        
-    
+
+
 
 
 
@@ -65,15 +65,19 @@ class Cart(View):
 
 
     def get(self, request):
-        ids = list(request.session.get('cart').Keys)
+        ids = list(request.session.get('cart').keys())
         cart_products = Product.get_products_id(ids)
         product_prices = list(map(self.map_function, cart_products))
         total = sum(product_prices)
         args = {'cart_products':cart_products, 'total':total}
-        return render(self.request, 'Home/cart.html', args)
+        return render(self.request, 'Store/cart.html', args)
 
 
 class Checkout(View):
+
+    def get(self, request):
+        return render(self.request, 'Store/checkout.html')
+
     def post(self, request):
         f_name = request.POST.get('f_name')
         phone = request.POST.get('phone')
@@ -92,7 +96,7 @@ class Checkout(View):
             if product.discount_price:
                 order = Order(customer=Customer(id=customer['id']), product=product, fname=fname, price=product.discount_price, phone=phone, address=address, quantity=cart.get(str(product.id)))
             else:
-                order = Order(customer=Customer(id=customer['id']), product=product, fname=fname, 
+                order = Order(customer=Customer(id=customer['id']), product=product, fname=fname,
                           price=product.price, phone=phone, address=address, quantity=cart.get(str(product.id)), city=city, method=method)
 
 
@@ -102,7 +106,7 @@ class Checkout(View):
         request.session['cart'] = {}
 
         return redirect('user_orders')
-        
+
 
 class Search(View):
     def get(self, request):
@@ -125,8 +129,8 @@ class Register(View):
         #                         email=email, password=password)
         # customer.password = make_password(customer.password)
         # customer.register()
-    
-            
+
+
         # return redirect('login')
         try:
             postData = request.POST
@@ -138,8 +142,8 @@ class Register(View):
                                 email=email, password=password)
             customer.password = make_password(customer.password)
             customer.register()
-    
-            
+
+
             return redirect('login')
         except:
             return HttpResponse("Email Or Phone Number Already Exists Please Try again")
@@ -181,50 +185,50 @@ class UserOrders(View):
 
         if product_id in cart:
             if not product.disc_price:
-                
+
                 return product.price * cart[product_id]
             else:
                 return product.disc_price * cart[product_id]
-    
+
     def get(self, request):
         customer = request.session.get('customer')
         user_orders = Order.get_orders_by_customer(customer)
         print(user_orders)
         args = {'user_orders': user_orders}
-        return render(self.request, 'Home/all_orders.html', args)   
+        return render(self.request, 'Home/all_orders.html', args)
 
 
-    
-        
 
-## Payment View 
+
+
+## Payment View
 
 def payment_view(request):
-    
-    
-    
+
+
+
     params = {'USER' : 'xxxxxxxx', # Edit this to your API user name
         'PWD' : 'xxxxxxxx', # Edit this to your API password
-        'SIGNATURE' : 'AFcWxV21C7fd0v3bYYYRCpSSRl31A0ltbCXAvF44j6B.kUqG3MePFr40', 
+        'SIGNATURE' : 'AFcWxV21C7fd0v3bYYYRCpSSRl31A0ltbCXAvF44j6B.kUqG3MePFr40',
         'METHOD':'SetExpressCheckout',
         'VERSION':86,
         'PAYMENTREQUEST_0_PAYMENTACTION':'SALE',     # type of payment
         'PAYMENTREQUEST_0_AMT':50,              # amount of transaction
-        'PAYMENTREQUEST_0_CURRENCYCODE':'USD',   
-        'cancelUrl':"xxxxxxxxxxxxx",    #For use if the consumer decides not to proceed with payment 
+        'PAYMENTREQUEST_0_CURRENCYCODE':'USD',
+        'cancelUrl':"xxxxxxxxxxxxx",    #For use if the consumer decides not to proceed with payment
         'returnUrl':"xxxxxxxxxxxx"  #For use if the consumer proceeds with payment}
     }
-    
-    
+
+
     params_string = urllib.urlencode(params)
     response = urllib.urlopen('https://api-3t.sandbox.paypal.com/nvp', params_string).read() #gets the response and parse it.
     response_dict = parse_qs(response)
     response_token = response_dict['TOKEN'][0]
     rurl = PAYPAL_URL+response_token #gather the response token and redirect to paypal to authorize the payment
     return HttpResponseRedirect(rurl)
-    # return render(request, 'Store/paypal.html', params)  
-    
-    
+    # return render(request, 'Store/paypal.html', params)
+
+
 def razor_pay(request):
     if request.method == 'POST':
         amount = 50000
@@ -233,5 +237,5 @@ def razor_pay(request):
             auth=('rzp_test_NJZIKFByHgvrqm', 'JEHpMASALEZQh7o4dVqoJjKy')
         )
         payment = client.order.create({'amount':amount, 'currency':'RM', 'payment_capture':1})
-    return render(request, 'Store/razor_pay.html')   
-    
+    return render(request, 'Store/razor_pay.html')
+

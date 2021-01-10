@@ -35,7 +35,7 @@ class UOM(models.Model):
 
     def __str__(self):
         return self.title
-    
+
 class Product_Images(models.Model):
     multi_images = models.ImageField(upload_to='images/')
 
@@ -49,7 +49,7 @@ class Currency(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    
+
     slug = models.CharField(max_length=200)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -67,16 +67,16 @@ class Product(models.Model):
 
     # @staticmethod
     # def discount_precent():
-        
-        
-    
-    
+
+
+
+
     def __str__(self):
         return self.name
 
 
     def get_products_id(ids):
-        return Product.object.filter(id__in=ids)
+        return Product.objects.filter(id__in=ids)
 
 class Customer(models.Model):
     username = models.CharField(max_length=155)
@@ -107,17 +107,17 @@ class City(models.Model):
 
 class DeliveryMethod(models.Model):
     title = models.CharField(max_length=155)
-    
+
     def __str__(self):
         return self.title
 
 class OrderStatus(models.Model):
     st_title = models.CharField(max_length=155)
-    
-    
+
+
     def __str__(self):
         return self.st_title
-    
+
 
 class Order(models.Model):
     invoice = models.AutoField(primary_key=True, blank=True)

@@ -63,6 +63,7 @@
             </div>
             <div class="titles">
                 <p class="text-center font-weight-bold text-wrap">{{ product.name }}</p>
+
             </div>
         </div>
         {% endfor %}
@@ -111,6 +112,14 @@
             </div>
             <div class="titles">
                 <p class="text-center font-weight-bold text-wrap">{{ product.name }}</p>
+                <p class="text-center font-weight-bold text-wrap">{{ product.price }}</p>
+                <form action="" method="POST">
+{% csrf_token %}
+                    <input hidden type="text" name="product" value="{{product.id}}">
+                    <input type="submit" value="Add To Cart" class="btn btn-success">
+
+                    </form>
+
             </div>
         </div>
         {% endfor %}
