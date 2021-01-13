@@ -5,8 +5,8 @@
 <!-- top-menu -->
 <nav class="navbar navbar-dark bg-danger top-navbar">
   <div class="ml-auto nav-item">
-    <a href="#" class="mr-2">Sign Up</a>
-    <a href="#" class="mr-2">Log In</a>
+    <a href="{% url 'register' %}" class="mr-2">Sign Up</a>
+    <a href="{% url 'login' %}" class="mr-2">Log In</a>
   </div>
 </nav>
 
@@ -14,7 +14,7 @@
 <div class="bg-danger">
   <div class="container">
     <nav class="navbar navbar-expand-md navbar-dark bg-danger">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{% url 'home' %}">
         <img id="navbar-logo" src="{% static 'images/logo.jpg' %}" alt="">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -30,7 +30,7 @@
 
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active mr-2">
-            <a href="#">
+            <a href="{% url 'cart' %}">
               <i class="fas fa-shopping-cart text-white"></i>
             </a>
           </li>

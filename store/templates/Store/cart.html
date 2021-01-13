@@ -1,7 +1,7 @@
 {% extends 'Store/base.html' %}
 
 {% load static %}
-
+{% load cart %}
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/cart.css' %}">
@@ -10,12 +10,13 @@
   <h2 class="pt-5 pb-4">Shopping Cart</h2>
   <div class="small-container cart-page">
     <div class="card">
+    {% if cart_products %}
       <table class="table">
         <thead>
           <tr>
             <th>Product</th>
             <th>Quantity</th>
-            <th>Subtotal</th>
+            <th>Product Price</th>
           </tr>
         </thead>
         <tbody>
@@ -30,28 +31,48 @@
                 </div>
               </div>
             </td>
-            <td class="align-middle"><input class="text-center form-control" type="text" min="0" name="quantity" id="quantity" value="1"><span><button class="min-btn">-</button><button class="add-btn">+</button></span></td>
-            <td class="font-weight-bold align-middle">{{ product.price }} Tk</td>
+            <td class="align-middle"><input class="text-center form-control" type="text" min="0" name="quantity" id="quantity" value="{{product|cart_quantity:request.session.cart}}"><span>
+                <form action="/" method="POST">
+                    {% csrf_token %}
+                    <input hidden type="text" name="product" value="{{product.id}}" />
+                            <input hidden type="number" name="remove" value="-1" />
+                            <input class="min-btn" type="submit" value="-" />
+
+                </form>
+                <!--<button class="min-btn">-</button>-->
+                <form action="/" method="POST">
+                    {% csrf_token %}
+                    <input hidden type="text" name="product" value="{{product.id}}" />
+                            <input type="submit" class="btn btn-success active" value="+"/>
+                    </form>
+                <button class="add-btn">+</button>
+                </span>
+                </td>
+            <td class="font-weight-bold align-middle">{{ product.price }} RM.</td>
           </tr>
+
           {% endfor %}
         </tbody>
       </table>
 
       <div class="total-price">
         <table class="mb-3">
-          <tr>
-            <td class="font-weight-bold">Subtotal</td>
-            <td class="font-weight-bold">100000 Tk</td>
-          </tr>
+          <!--<tr>-->
+          <!--  <td class="font-weight-bold">Subtotal</td>-->
+          <!--  <td class="font-weight-bold">100000 Tk</td>-->
+          <!--</tr>-->
           <tr>
             <td class="font-weight-bold cart-total-price">TOTAL</td>
-            <td class="font-weight-bold">100000 Tk</td>
+            <td class="font-weight-bold">{{total}}RM</td>
           </tr>
           <tr>
-            <td class="text-center" colspan="2"><a href="#"><button class="btn btn-danger">Proceed To Checkout <i class="fas fa-arrow-right"></i></button></a></td>
+            <td class="text-center" colspan="2"><a href="{% url 'checkout' %}"><button class="btn btn-danger">Proceed To Checkout <i class="fas fa-arrow-right"></i></button></a></td>
           </tr>
         </table>
       </div>
+      {% else %}
+      <h4 class="py-3 text-center">Your cart is empty!</h4>
+      {% endif %}
     </div>
   </div>
 </div>

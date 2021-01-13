@@ -120,16 +120,19 @@ class OrderStatus(models.Model):
 
 
 class Order(models.Model):
+    product = models.ForeignKey(
+        Product, null=True, on_delete=models.CASCADE, related_name="product")
+    quantity = models.IntegerField(default=1, null=True)
     invoice = models.AutoField(primary_key=True, blank=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer")
     phone = models.CharField(max_length=12)
     address = models.CharField(max_length=150)
     price = models.IntegerField(null=True, blank=True)
     disc_price = models.IntegerField(null=True, blank=True)
     f_name = models.CharField(max_length=100)
-    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True)
-    method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, null=True, blank=True)
-    order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, null=True, blank=True, default=1)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True, related_name="city")
+    method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, null=True, blank=True, related_name="method")
+    order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, null=True, blank=True, default=1, related_name="order_status")
     total = models.IntegerField()
 
     def save(self, *args, **kwargs):

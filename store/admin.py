@@ -1,5 +1,5 @@
 from django.contrib import admin
-from store.models import Category, Brand, UOM, Product_Images, Product, Customer, City, Order, SubCategory, Currency 
+from store.models import Category, Brand, UOM, Product_Images, Product, Customer, City, Order, SubCategory, Currency, DeliveryMethod
 # Register your models here.
 
 
@@ -13,3 +13,4 @@ admin.site.register(City)
 admin.site.register(Order)
 admin.site.register(SubCategory)
 admin.site.register(Currency)
+admin.site.register(DeliveryMethod)

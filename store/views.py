@@ -10,6 +10,12 @@ from django.contrib.auth.hashers import make_password, check_password
 
 class Home(View):
     def get(self, request):
+
+        cart = request.session.get('cart')
+
+        if not cart:
+            request.session['cart'] = {}
+
         products = Product.objects.all()
         cats = Category.objects.all()
         args = {'products':products, 'cats':cats}
@@ -37,7 +43,7 @@ class Home(View):
             cart[product] = 1
         request.session['cart'] = cart
 
-        return redirect('home')
+        return redirect('cart')
 
 class Product_details(View):
     def get(self, request, slug):
@@ -59,26 +65,50 @@ class Cart(View):
             if product.discount_price:
                 return product.price * cart[product_id]
             else:
-
                 return product.price * cart[product_id]
 
 
 
     def get(self, request):
-        ids = list(request.session.get('cart').keys())
-        cart_products = Product.get_products_id(ids)
-        product_prices = list(map(self.map_function, cart_products))
-        total = sum(product_prices)
-        args = {'cart_products':cart_products, 'total':total}
-        return render(self.request, 'Store/cart.html', args)
+        if request.session.get('cart') is not None:
+            ids = list(request.session.get('cart').keys())
+            cart_products = Product.get_products_id(ids)
+            product_prices = list(map(self.map_function, cart_products))
+            total = sum(product_prices)
+            args = {'cart_products':cart_products, 'total':total}
+            return render(self.request, 'Store/cart.html', args)
+        else:
+
+            return render(self.request, 'Store/cart.html')
 
 
 class Checkout(View):
 
+    def map_function(self, product):
+        cart = self.request.session.get('cart', None)
+        product_id = str(product.id)
+
+        if product_id in cart:
+            if product.discount_price:
+                return product.discount_price * cart[product_id]
+            else:
+                return product.price * cart[product_id]
+
+
     def get(self, request):
-        return render(self.request, 'Store/checkout.html')
+        args = {}
+        if request.session.get('cart') is not None:
+            ids = list(request.session.get('cart').keys())
+            cart_products = Product.get_products_id(ids)
+            product_prices = list(map(self.map_function, cart_products))
+            total = sum(product_prices)
+            cities = City.objects.all()
+            deliveries = DeliveryMethod.objects.all()
+            args = {'cart_products':cart_products, 'total': total, "cities": cities, "deliveries": deliveries}
+        return render(self.request, 'Store/checkout.html', args)
 
     def post(self, request):
+        order = None
         f_name = request.POST.get('f_name')
         phone = request.POST.get('phone')
         address = request.POST.get('address')
@@ -88,24 +118,28 @@ class Checkout(View):
         customer = request.session.get('customer')
         products = Product.get_products_id(list(cart.keys()))
 
+
         for product in products:
             # order = Order(customer=Customer(id=customer['id']), product=product, fname=fname,
             #               price=product.price, phone=phone, address=address, quantity=cart.get(str(product.id)))
             ## IF Product has Discount Price This method must be called
 
             if product.discount_price:
-                order = Order(customer=Customer(id=customer['id']), product=product, fname=fname, price=product.discount_price, phone=phone, address=address, quantity=cart.get(str(product.id)))
+
+                # order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, city=City(name=city), method=DeliveryMethod(title=method), price=product.discount_price, phone=phone, address=address, quantity=cart.get(str(product.id)))
+                order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, price=product.discount_price, phone=phone, address=address, quantity=cart.get(str(product.id)))
             else:
-                order = Order(customer=Customer(id=customer['id']), product=product, fname=fname,
-                          price=product.price, phone=phone, address=address, quantity=cart.get(str(product.id)), city=city, method=method)
+                # order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, city=City(name=city), method=DeliveryMethod(title=method), price=product.price, phone=phone, address=address, quantity=cart.get(str(product.id)))
+                order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, price=product.price, phone=phone, address=address, quantity=cart.get(str(product.id)))
 
-
+            order.city = City(name=city)
+            order.method = DeliveryMethod(title=method)
 
             order.save()
 
         request.session['cart'] = {}
 
-        return redirect('user_orders')
+        return redirect('home')
 
 
 class Search(View):

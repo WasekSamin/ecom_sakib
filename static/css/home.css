@@ -47,9 +47,11 @@
 
 .slick-prev:before {
     color: #C82333!important;
+    font-size: 30px!important;
   }
   .slick-next:before {
     color: #C82333!important;
+    font-size: 30px!important;
   }
 
 .prod-row {
@@ -143,7 +145,7 @@
     }
 
     .slick-prev {
-        left: 0!important;
+        left: -10px!important;
     }
 }
 

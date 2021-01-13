@@ -26,7 +26,7 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container home-container">
     <div class="card">
         <!-- Categories -->
         <h4 class="text-uppercase mt-4 p-2 cat">Categories</h4>
@@ -116,7 +116,7 @@
                 <form action="" method="POST">
 {% csrf_token %}
                     <input hidden type="text" name="product" value="{{product.id}}">
-                    <input type="submit" value="Add To Cart" class="btn btn-success">
+                    <input type="submit" value="Add To Cart" class="btn btn-success d-block mx-auto">
 
                     </form>
 
