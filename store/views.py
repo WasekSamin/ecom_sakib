@@ -45,15 +45,12 @@ class Home(View):
 
         return redirect('cart')
 
+
 class Product_details(View):
     def get(self, request, slug):
-        pd = Product.objects.get(slug=slug)
-        args = {}
-        return render(self.request, 'Store/product_details.html', args)
-
-
-
-
+        product = Product.objects.get(slug=slug)
+        args = {"product": product}
+        return render(self.request, 'Store/single_product.html', args)
 
 
 class Cart(View):
@@ -83,7 +80,6 @@ class Cart(View):
 
 
 class Checkout(View):
-
     def map_function(self, product):
         cart = self.request.session.get('cart', None)
         product_id = str(product.id)
@@ -118,6 +114,10 @@ class Checkout(View):
         customer = request.session.get('customer')
         products = Product.get_products_id(list(cart.keys()))
 
+        city = City.objects.get(name=city)
+        # print(city)
+        method = DeliveryMethod.objects.get(title=method)
+        # print(method)
 
         for product in products:
             # order = Order(customer=Customer(id=customer['id']), product=product, fname=fname,
@@ -125,17 +125,9 @@ class Checkout(View):
             ## IF Product has Discount Price This method must be called
 
             if product.discount_price:
-
-                # order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, city=City(name=city), method=DeliveryMethod(title=method), price=product.discount_price, phone=phone, address=address, quantity=cart.get(str(product.id)))
-                order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, price=product.discount_price, phone=phone, address=address, quantity=cart.get(str(product.id)))
+                Order.objects.create(customer=Customer(id=customer['id']), product=product, f_name=f_name, price=product.discount_price, phone=phone, city=city, method=method, address=address, quantity=cart.get(str(product.id)))
             else:
-                # order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, city=City(name=city), method=DeliveryMethod(title=method), price=product.price, phone=phone, address=address, quantity=cart.get(str(product.id)))
-                order = Order(customer=Customer(id=customer['id']), product=product, f_name=f_name, price=product.price, phone=phone, address=address, quantity=cart.get(str(product.id)))
-
-            order.city = City(name=city)
-            order.method = DeliveryMethod(title=method)
-
-            order.save()
+                Order.objects.create(customer=Customer(id=customer['id']), product=product, f_name=f_name, price=product.price, phone=phone, city=city, method=method, address=address, quantity=cart.get(str(product.id)))
 
         request.session['cart'] = {}
 

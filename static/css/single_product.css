@@ -1,0 +1,73 @@
+.single_product_container {
+    margin-top: 80px;
+    margin-bottom: 50px;
+}
+
+#img-container img {
+    width: 475px;
+    height: 500px;
+    object-fit: cover;
+}
+
+.problem-block {
+    font-size: 20px;
+}
+
+.prod-title, .prod-price, .prod-disc-price {
+    font-size: 1.7rem;
+}
+
+.cross-product-price {
+    text-decoration: line-through;
+}
+
+.fa-mobile.mobile-icon {
+    font-size: 25px;
+}
+
+@media screen and (max-width: 1199px) {
+    #img-container img {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    #img-container img {
+        height: 450px;
+    }
+
+    .prod-title {
+        font-size: 1.5rem;
+    }
+
+    .prod-price, .prod-disc-price {
+        font-size: 1.25rem;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #img-container img {
+        height: 400px;
+    }
+
+    .product-desc {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .sizes {
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    #img-container img {
+        height: 300px;
+    }
+}
+
+@media screen and (max-width: 326px) {
+    #product-description {
+        font-size: 1.5rem;
+    }
+}

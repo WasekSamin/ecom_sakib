@@ -1,3 +1,128 @@
 body {
     background-color: #E6E6E6;
 }
+
+/* footer */
+
+.footer {
+    margin-top: 80px;
+    width: 100%;
+    background: #00121b;
+    display: block;
+}
+
+.footer-logo {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.inner-footer {
+    width: 100%;
+    margin: auto;
+    padding: 30px 30px 30px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.footer-items {
+    width: 50%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.footer-items h1 {
+    padding: 10px 0;
+    font-size: 25px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.footer-items p {
+    color: grey;
+    font-size: 16px;
+    text-align: justify;
+    line-height: 25px;
+}
+
+.footer-items h2 {
+    margin: 10px 0;
+    color: grey;
+    font-size: 16px;
+    font-weight: lighter;
+    text-transform: uppercase;
+}
+
+.border-links {
+    height: 2px;
+    width: 40px;
+    background: #ff0000;
+}
+
+.footer-items ul {
+    list-style: none;
+    color: #fff;
+    font-size: 15px;
+}
+
+.footer-items ul a {
+    text-decoration: none;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.footer-items ul a:hover {
+    color: #ff0000;
+}
+
+.footer-items ul li {
+    margin: 10px 0;
+}
+
+/*.social-media {*/
+/*    width: 100%;*/
+/*    color: #fff;*/
+/*    text-align: center;*/
+/*}*/
+
+/*.social-media a {*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.social-media i {*/
+/*    height: 40px;*/
+/*    width: 40px;*/
+/*    margin: 20px 5px;*/
+/*    padding: 10px;*/
+/*    color: #fff;*/
+/*    border-radius: 50%;*/
+/*    border: 1px solid grey;*/
+/*    transition: 0.3s;*/
+/*}*/
+
+/*.social-media i:hover {*/
+/*    background: grey;*/
+/*}*/
+
+.footer-bottom {
+    padding: 10px;
+    background: #3d545f;
+    color: #fff;
+    font-size: 12px;
+}
+
+/*@media screen and (max-width: 1085px) {*/
+/*    .footer-items {*/
+/*        width: 50%;*/
+/*    }*/
+/*}*/
+
+
+@media screen and (max-width: 600px) {
+    .footer-items {
+        width: 100%;
+    }
+}

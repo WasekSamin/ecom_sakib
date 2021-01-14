@@ -45,6 +45,25 @@ class Currency(models.Model):
     def __str__(self):
         return self.curr_sign
 
+class ProductColors(models.Model):
+    cl_name = models.CharField(max_length=155)
+
+    def __str__(self):
+        return self.cl_name
+
+
+class ProductSizes(models.Model):
+    SIZES = [
+            ("S", "S"),
+            ("M", "M"),
+            ("L", "L"),
+            ("XL", "XL"),
+            ("XXL", "XXL")
+        ]
+    size_name = models.CharField(max_length=50, null=True, blank=True, choices=SIZES)
+
+    def __str__(self):
+        return self.size_name
 
 
 class Product(models.Model):
@@ -54,16 +73,18 @@ class Product(models.Model):
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
-    price = models.IntegerField(null=True, blank=True)
+    price = models.IntegerField(null=True)
     discount_price = models.IntegerField(null=True, blank=True)
-    percent = models.IntegerField(null=True, blank=True)
+    # percent = models.IntegerField(null=True, blank=True)
+    size = models.ManyToManyField(ProductSizes, null=True, blank=True)
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
     length = models.IntegerField(null=True, blank=True)
-    color = models.IntegerField(null=True, blank=True)
+    color = models.ManyToManyField(ProductColors, null=True, blank=True)
     stock = models.BooleanField()
     SKU = models.CharField(max_length=150)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     # @staticmethod
     # def discount_precent():
@@ -112,14 +133,23 @@ class DeliveryMethod(models.Model):
         return self.title
 
 class OrderStatus(models.Model):
-    st_title = models.CharField(max_length=155)
+    st_title = models.CharField(max_length=155, default="Pending")
 
 
     def __str__(self):
         return self.st_title
 
 
+
 class Order(models.Model):
+
+    STATUS = (
+        ("PENDING", "PENDING"),
+        ("PICKED", "PICKED"),
+        ("DELIVERED", "DELIVERED")
+        )
+
+
     product = models.ForeignKey(
         Product, null=True, on_delete=models.CASCADE, related_name="product")
     quantity = models.IntegerField(default=1, null=True)
@@ -132,7 +162,7 @@ class Order(models.Model):
     f_name = models.CharField(max_length=100)
     city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True, related_name="city")
     method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, null=True, blank=True, related_name="method")
-    order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, null=True, blank=True, default=1, related_name="order_status")
+    order_status = models.CharField(null=True, blank=True, choices=STATUS, default="PENDING", max_length=155)
     total = models.IntegerField()
 
     def save(self, *args, **kwargs):
