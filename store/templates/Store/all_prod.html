@@ -1,0 +1,60 @@
+{% extends 'Store/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/all_prod.css' %}">
+
+    <div class="container my-5">
+        <div class="prod-row">
+            {% for product in products %}
+                <div class="prod-cards bg-white">
+                    <div class="prod-images mb-3">
+                        <img class="w-100" src="{{ product.product_main_image.url }}" alt="...">
+                    </div>
+                    <div class="prod-titles text-center">
+                        <h5 class="font-weight-bold prod-name word">{{ product.name }}</h5>
+                        {% if not product.discount_price %}
+                            <p class="prod-price font-weight-bold mb-5 text-wrap"><span class="text-danger">Price:</span> {{ product.price }} RM.</p>
+                        {% else %}
+                            <p class="text-muted cross-product-price mb-1 text-wrap">Price: {{ product.price }} RM.</p>
+                            <p class="prod-price font-weight-bold mb-5 text-wrap"><span class="text-danger">Discount Price:</span> {{ product.discount_price }} RM.</p>
+                        {% endif %}
+                    </div>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{product.id}}">
+                        <button type="submit" class="btn btn-success add-btn w-100">Add To Cart</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if products|length > 0 %}
+        <div class="container my-4">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-info" href="?page=1">&laquo; First</a>
+                    {% endif %}
+
+                    <span class="mx-2 align-top">
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                        {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3"  %}
+                        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                        {% endfor %}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                    <a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

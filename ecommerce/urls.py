@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from store import views
-from store.views import Home, Cart, Checkout, Search, Register, Login, UserOrders, logout, Product_details
+from store.views import Home, Cart, Checkout, Search, Register, Login, UserOrders, logout, Product_details, AllProd, TopProd, NewProd
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -25,10 +25,10 @@ urlpatterns = [
     path('adminpanel/', admin.site.urls),
     ## Home Page View
     path('',Home.as_view(), name="home"),
-    
+
     ## Producr Details Route
-    
-    path('products/<slug:slug>/', Product_details.as_view(), name="Product_details"),
+
+    path('products/<str:slug>/', Product_details.as_view(), name="Product_details"),
     ## Cart View
 
 
@@ -40,14 +40,20 @@ urlpatterns = [
 
     ## Searc Form Functions to search by products
     path('search_by_product/', Search.as_view(), name="search_by"),
+    # All product page url
+    path('all-products/', AllProd.as_view(), name="allProd"),
+    # Top product page url
+    path('top-products/', TopProd.as_view(), name="topProd"),
+    # New product page url
+    path('new-products/', NewProd.as_view(), name="newProd"),
 
-    ## For Registering, Login and Logout 
+    ## For Registering, Login and Logout
     path('register/', Register.as_view(), name="register"),
     path('login/', Login.as_view(), name="login"),
     path('logout/', views.logout, name="logout"),
 
     ## Showing Customers Orders By their own Id
 
-    path('user_orders/', UserOrders.as_view(), name="user_orders"), 
+    path('user_orders/', UserOrders.as_view(), name="user_orders"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

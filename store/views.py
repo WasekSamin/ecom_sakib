@@ -4,6 +4,7 @@ from .models import *
 from django.views import View
 from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.paginator import Paginator
 # Create your views here.
 
 
@@ -137,9 +138,114 @@ class Checkout(View):
 class Search(View):
     def get(self, request):
         query = request.GET['query']
-        products = Product.objects.filter(name__icontains=query)
+        products = Product.objects.filter(name__icontains=query).order_by("-id")
+
         args = {'products': products}
-        return render(self.request, 'Home/search.html', args)
+        return render(self.request, 'Store/search_page.html', args)
+
+class AllProd(View):
+    def get(self, request):
+        products = Product.objects.all().order_by("-id")
+
+        paginator = Paginator(products, 24)
+        # method  = request.GET
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        args = {'products': products, 'page_obj': page_obj}
+        return render(self.request, 'Store/all_prod.html', args)
+
+    def post(self, request):
+        product = request.POST.get('product')
+        cart = request.session.get('cart')
+        remove = request.POST.get('remove')
+
+        if cart:
+            quantity = cart.get(product)
+
+            if quantity:
+                if remove:
+                    cart[product] = quantity - 1
+                else:
+                    cart[product] = quantity + 1
+            else:
+                cart[product] = 1
+            if cart[product] < 1:
+                cart.pop(product)
+        else:
+            cart = {}
+            cart[product] = 1
+        request.session['cart'] = cart
+
+        return redirect('cart')
+
+class TopProd(View):
+    def get(self, request):
+        products = Product.objects.all().order_by("-id")
+
+        paginator = Paginator(products, 24)
+        # method  = request.GET
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        args = {'products': products, 'page_obj': page_obj}
+        return render(self.request, 'Store/top_prod.html', args)
+
+    def post(self, request):
+        product = request.POST.get('product')
+        cart = request.session.get('cart')
+        remove = request.POST.get('remove')
+
+        if cart:
+            quantity = cart.get(product)
+
+            if quantity:
+                if remove:
+                    cart[product] = quantity - 1
+                else:
+                    cart[product] = quantity + 1
+            else:
+                cart[product] = 1
+            if cart[product] < 1:
+                cart.pop(product)
+        else:
+            cart = {}
+            cart[product] = 1
+        request.session['cart'] = cart
+
+        return redirect('cart')
+
+class NewProd(View):
+    def get(self, request):
+        products = Product.objects.all().order_by("-id")[:24]
+
+        args = {'products': products}
+        return render(self.request, 'Store/new_prod.html', args)
+
+    def post(self, request):
+        product = request.POST.get('product')
+        cart = request.session.get('cart')
+        remove = request.POST.get('remove')
+
+        if cart:
+            quantity = cart.get(product)
+
+            if quantity:
+                if remove:
+                    cart[product] = quantity - 1
+                else:
+                    cart[product] = quantity + 1
+            else:
+                cart[product] = 1
+            if cart[product] < 1:
+                cart.pop(product)
+        else:
+            cart = {}
+            cart[product] = 1
+        request.session['cart'] = cart
+
+        return redirect('cart')
+
 
 class Register(View):
     def get(self, request):

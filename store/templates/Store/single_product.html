@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div id="img-container">
-                    <img class="prod-img" src="{{ product.image.url }}" alt="">
+                    <img class="prod-img" src="{{ product.product_main_image.url }}" alt="">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ml-auto product-desc">
@@ -22,7 +22,7 @@
                 <p class="text-muted mb-1">Category: {{ product.category }}</p>
                 <p class="text-muted">SKU: {{ product.SKU }}</p>
                 {% if not product.discount_price %}
-                    <h5 class="prod-price">Price: {{ product.price }} RM.</h5>
+                    <h5 class="prod-price"><span class="text-danger">Price:</span> {{ product.price }} RM.</h5>
                 {% else %}
                     <p class="text-muted cross-product-price mb-1">Price: {{ product.price }} RM.</p>
                     <h5 class="font-weight-bold prod-disc-price"><span class="text-danger">Discount Price:</span> {{ product.discount_price }} RM.</h5>

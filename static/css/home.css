@@ -62,6 +62,7 @@
 }
 
 .prod-cards {
+    position: relative;
     width: 100%;
     border: 1px solid #DFDFDF;
 }
@@ -73,6 +74,31 @@
     display: block;
     margin: auto;
     object-fit: contain;
+}
+
+.prod-links {
+    color: #000;
+}
+
+.prod-links:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+.prod-name {
+    font-size: 1.5rem;
+}
+
+.word {
+    word-wrap: break-word;
+}
+
+.prod-price {
+    font-size: 1.2rem;
+}
+
+.cross-product-price {
+    text-decoration: line-through;
 }
 
 .top-prod-link {

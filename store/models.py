@@ -36,8 +36,11 @@ class UOM(models.Model):
     def __str__(self):
         return self.title
 
-class Product_Images(models.Model):
+class ProductImages(models.Model):
     multi_images = models.ImageField(upload_to='images/')
+
+    def __str__(self):
+        return str(self.multi_images)
 
 class Currency(models.Model):
     curr_sign = models.CharField(max_length=10)
@@ -70,17 +73,17 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
 
     slug = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
+    product_main_image = models.ImageField(upload_to="images/", null=True, blank=True)
+    product_other_images = models.ManyToManyField(ProductImages, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     price = models.IntegerField(null=True)
     discount_price = models.IntegerField(null=True, blank=True)
-    # percent = models.IntegerField(null=True, blank=True)
-    size = models.ManyToManyField(ProductSizes, null=True, blank=True)
+    size = models.ManyToManyField(ProductSizes, blank=True)
     height = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
     length = models.IntegerField(null=True, blank=True)
-    color = models.ManyToManyField(ProductColors, null=True, blank=True)
+    color = models.ManyToManyField(ProductColors, blank=True)
     stock = models.BooleanField()
     SKU = models.CharField(max_length=150)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
