@@ -1,31 +1,56 @@
 .prod-row {
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-columns: 24% 24% 24% 24%;
     grid-column-gap: 10px;
-    grid-row-gap: 12px;
+    grid-row-gap: 10px;
 }
 
 .prod-cards {
     position: relative;
     width: 100%;
-    border: 1px solid #CCD5D6;
-    border-radius: 5px;
-}
-
-.prod-cards:hover {
-    -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-    -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
-    box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    border: 1px solid #DFDFDF;
 }
 
 .prod-images img {
+    position: relative;
+    padding: 10px;
     max-width: 100%;
-    height: 160px;
-    object-fit: cover;
+    height: 180px;
+    display: block;
+    margin: auto;
+    object-fit: contain;
+}
+
+.prod-badge {
+    position: absolute;
+    right: 2%;
+    top: 1%;
+    font-size: 1.3rem;
+    z-index: 1;
+}
+
+.prod-links {
+    color: #000;
+}
+
+.prod-links:hover, .prod-links:focus, .prod-links:active {
+    color: #000;
+    text-decoration: none;
+    border: none;
+    outline: none;
 }
 
 .prod-name {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+}
+
+.order-block {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-btn .fa-heart {
+    font-size: 20px;
 }
 
 .word {
@@ -33,17 +58,30 @@
 }
 
 .prod-price {
-    font-size: 1rem;
+    font-size: 1.2rem;
+}
+
+.no-disc-price {
+    margin-bottom: 2.7rem;
+}
+
+.order-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .cross-product-price {
     text-decoration: line-through;
 }
 
-.add-btn {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+.input-btn .submit-button {
+    width: 150%!important;
+}
+
+.input-btn .fa-heart {
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .pagination {
@@ -52,32 +90,36 @@
     justify-content: center;
 }
 
-@media screen and (max-width: 1030px) {
-    .prod-row {
-        grid-template-columns: 19.8% 19.8% 19.8% 19.8% 19.8%;
+/* Responsive */
+
+@media screen and (max-width: 1199px) {
+    .input-btn .submit-button {
+        width: 120%!important;
+    }
+
+    .input-btn .fa-heart {
+        font-size: 1.3rem;
     }
 }
 
 @media screen and (max-width: 991px) {
     .prod-row {
-        grid-template-columns: 24% 24% 24% 24%;
+        grid-template-columns: 33% 33% 33%;
     }
 }
 
 @media screen and (max-width: 767px) {
     .prod-row {
-        grid-template-columns: 33% 33% 33%;
-    }
-}
-
-@media screen and (max-width: 575px) {
-    .prod-row {
         grid-template-columns: 49% 49%;
     }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 479px) {
     .prod-row {
         grid-template-columns: 100%;
+    }
+
+    .input-btn .fa-heart {
+        font-size: 1.5rem;
     }
 }

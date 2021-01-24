@@ -13,18 +13,27 @@
     integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw=="
     crossorigin="anonymous" />
 
-<div class="banners bg-white">
-    <div class="container banner-images">
-        <div class="row no-gutters">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <img class="banner-1" src="{% static 'images/hero.jpg' %}" alt="">
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <img class="banner-2" src="{% static 'images/hero-col-1.jpg' %}" alt="">
+{% if sliders %}
+    <div class="banners bg-white">
+        <div class="container banner-images">
+            <div class="row no-gutters">
+                {% if sliders|length == 1 %}
+                    {% for slider in sliders %}
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <img class="banner-1" src="{{ slider.img.url }}" alt="">
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% for slider in sliders %}
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <img class="banner-1" src="{{ slider.img.url }}" alt="">
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>
-</div>
+{% endif %}
 
 <div class="container home-container">
     <div class="card">
@@ -57,17 +66,21 @@
     </div>
     <div class="prod-row product-slider">
         {% for product in products %}
-        <a class="prod-links" href="{% url 'Product_details' product.slug %}">
             <div class="prod-cards bg-white">
-                <div class="prod-images">
-                    <img src="{{ product.product_main_image.url }}" alt="">
-                </div>
-                <div class="titles">
-                    <p class="text-center font-weight-bold text-wrap word">{{ product.name }}</p>
-
-                </div>
+                    <div class="prod-images">
+                        <a class="prod-links" href="{% url 'Product_details' product.slug %}">
+                            {% if product.discount_percentage %}
+                                <p class="prod-badge"><span class="badge badge-danger">{{ product.discount_percentage }}% OFF</span></p>
+                            {% endif %}
+                            <img src="{{ product.product_main_image.url }}" alt="">
+                        </a>
+                    </div>
+                    <a class="prod-links" href="{% url 'Product_details' product.slug %}">
+                        <div class="titles">
+                            <p class="text-center font-weight-bold text-wrap top-prod-name word">{{ product.name }}</p>
+                        </div>
+                    </a>
             </div>
-        </a>
         {% endfor %}
     </div>
 
@@ -78,7 +91,7 @@
                 <h4 class="mt-4 mb-4 p-2 text-uppercase float-left">Newest Product</h4>
             </div>
             <div class="float-right top-prod-link">
-                <a class="pr-2" href="#">See All</a>
+                <a class="pr-2" href="{% url 'newProd' %}">See All</a>
             </div>
         </div>
     </div>
@@ -86,10 +99,13 @@
         {% for product in new_prod %}
         <div class="prod-cards bg-white">
             <div class="prod-images">
+                {% if product.discount_percentage %}
+                    <p class="prod-badge"><span class="badge badge-danger">{{ product.discount_percentage }}% OFF</span></p>
+                {% endif %}
                 <img src="{{ product.product_main_image.url }}" alt="">
             </div>
             <div class="titles">
-                <p class="text-center font-weight-bold text-wrap word">{{ product.name }}</p>
+                <p class="text-center font-weight-bold new-prod-name text-wrap word">{{ product.name }}</p>
             </div>
         </div>
         {% endfor %}
@@ -108,28 +124,43 @@
     </div>
     <div class="prod-row product-slider">
         {% for product in products %}
-        <a class="prod-links" href="{% url 'Product_details' product.slug %}">
             <div class="prod-cards bg-white">
-                <div class="prod-images">
-                    <img src="{{ product.product_main_image.url }}" alt="">
-                </div>
-                <div class="titles">
-                    <h5 class="text-center font-weight-bold text-wrap prod-name word">{{ product.name }}</h5>
-                    {% if not product.discount_price %}
-                        <p class="text-center font-weight-bold text-wrap prod-price"><span class="text-danger">Price:</span> {{ product.price }} RM.</p>
-                    {% else %}
-                        <p class="text-center cross-product-price mb-1">Price: {{ product.price }} RM.</p>
-                        <p class="text-center font-weight-bold prod-price"><span class="text-danger">Discount Price: {{ product.discount_price }} RM.</p>
-                    {% endif %}
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <input hidden type="text" name="product" value="{{product.id}}">
-                        <input type="submit" value="Add To Cart" class="btn btn-success mb-3 d-block mx-auto">
-                    </form>
+                    <div class="prod-images">
+                        <a class="prod-links" href="{% url 'Product_details' product.slug %}">
+                            {% if product.discount_percentage %}
+                                <p class="prod-badge"><span class="badge badge-danger">{{ product.discount_percentage }}% OFF</span></p>
+                            {% endif %}
+                            <img src="{{ product.product_main_image.url }}" alt="">
+                        </a>
+                    </div>
+                    <div class="titles">
+                        <a class="prod-links" href="{% url 'Product_details' product.slug %}">
+                            <h5 class="text-center font-weight-bold text-wrap prod-name word">{{ product.name }}</h5>
+                            {% if not product.discount_price %}
+                                <p class="text-center font-weight-bold text-wrap prod-price no-disc-price"><span class="text-danger">Price:</span> {{ product.price }} RM.</p>
+                            {% else %}
+                                <p class="text-center cross-product-price mb-1">Price: {{ product.price }} RM.</p>
+                                <p class="text-center font-weight-bold prod-price"><span class="text-danger">Price:</span> {{ product.discount_price }} RM.</p>
+                            {% endif %}
+                        </a>
+                        <form action="" method="POST" class="order-block">
+                            {% csrf_token %}
+                            <input hidden type="text" name="product" value="{{product.id}}">
 
-                </div>
+                            <!--Order input-btn-->
+                            <div class="input-btn mb-3 pl-3">
+                                <button type="submit" class="btn btn-danger submit-button"><i class="fas fa-shopping-cart"></i> Add To Cart</button>
+                            </div>
+
+                            <!--Wishlist button-->
+                            <div class="input-btn mb-3 align-self-center pr-3">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </form>
+
+                    </div>
+
             </div>
-        </a>
         {% endfor %}
     </div>
 </div>

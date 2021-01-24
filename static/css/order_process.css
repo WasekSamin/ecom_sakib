@@ -1,0 +1,20 @@
+.order-from {
+    display: flex;
+    flex-direction: row;
+}
+
+.site-logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.person-info .fa-user {
+    font-size: 1.35rem;
+}
+
+.product-img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}

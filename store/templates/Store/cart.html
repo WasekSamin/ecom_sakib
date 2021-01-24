@@ -23,32 +23,37 @@
           {% for product in cart_products %}
           <tr>
             <td>
+                <h3>{{product.uoms.title}}</h3>
               <div class="cart-info">
-                <img src="{{ product.product_main_image.url }}" alt="">
-                <div>
-                  <p class="font-weight-bold">{{ product.name }}</p>
-                  <a href="#">Remove</a>
+                <a class="prod-links" href="{% url 'Product_details' product.slug %}">
+                    <img src="{{ product.product_main_image.url }}" alt="">
+                </a>
+              <div>
+                  <a class="prod-links" href="{% url 'Product_details' product.slug %}">
+                    <p class="font-weight-bold text-dark">{{ product.name }}</p>
+                  </a>
+                  <a class="btn btn-sm btn-danger" href="#"><i class="fas fa-trash-alt" style="font-size: 20px"></i></a>
                 </div>
               </div>
             </td>
-            <td class="align-middle"><input class="text-center form-control" type="text" min="0" name="quantity" id="quantity" value="{{product|cart_quantity:request.session.cart}}"><span>
-                <form action="/" method="POST">
-                    {% csrf_token %}
-                    <input hidden type="text" name="product" value="{{product.id}}" />
+            <td class="align-middle cart-form"><input class="text-center form-control" type="text" min="0" name="quantity" id="quantity" value="{{product|cart_quantity:request.session.cart}}">
+                <div class="cart-btn">
+                    <!--Sub button-->
+                    <form action="/" method="POST">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{product.id}}" />
                             <input hidden type="number" name="remove" value="-1" />
-                            <input class="min-btn" type="submit" value="-" />
-
-                </form>
-                <!--<button class="min-btn">-</button>-->
-                <form action="/" method="POST">
-                    {% csrf_token %}
-                    <input hidden type="text" name="product" value="{{product.id}}" />
-                            <input type="submit" class="btn btn-success active" value="+"/>
+                            <span><button type="submit" class="min-btn">-</button></span>
                     </form>
-                <button class="add-btn">+</button>
-                </span>
-                </td>
-            <td class="font-weight-bold align-middle">{{ product.price }} RM.</td>
+                    <!--Add button-->
+                    <form action="/" method="POST">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{product.id}}" />
+                            <span><button type="submit" class="add-btn">+</button></span>
+                    </form>
+                </div>
+            </td>
+            <td class="font-weight-bold align-middle">{{ product|cart_total:request.session.cart }} RM.</td>
           </tr>
 
           {% endfor %}
@@ -63,10 +68,14 @@
           <!--</tr>-->
           <tr>
             <td class="font-weight-bold cart-total-price">TOTAL</td>
-            <td class="font-weight-bold">{{total}}RM</td>
+            <td class="font-weight-bold">{{total}} RM.</td>
           </tr>
           <tr>
+              {% if request.session.customer %}
             <td class="text-center" colspan="2"><a href="{% url 'checkout' %}"><button class="btn btn-danger">Proceed To Checkout <i class="fas fa-arrow-right"></i></button></a></td>
+            {% else %}
+            <td class="text-center" colspan="2"><a href="{% url 'login' %}"><button class="btn btn-danger">Please Login First <i class="fas fa-arrow-right"></i></button></a></td>
+            {% endif %}
           </tr>
         </table>
       </div>

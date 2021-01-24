@@ -3,15 +3,22 @@
 <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 
 <!-- top-menu -->
-<nav class="navbar navbar-dark bg-danger top-navbar">
-  <div class="ml-auto nav-item">
-    <a href="{% url 'register' %}" class="mr-2">Sign Up</a>
-    <a href="{% url 'login' %}" class="mr-2">Log In</a>
-  </div>
-</nav>
+<div class="bg-danger">
+<nav class="navbar navbar-dark bg-danger top-navbar container">
+      <div class="ml-auto nav-item">
+          {% if not request.session.customer %}
+            <a href="{% url 'register' %}" class="mr-2 font-weight-bold">Sign Up</a><span class="font-weight-bold text-white mr-1">|</span>
+            <a href="{% url 'login' %}" class="mr-2 font-weight-bold">Sign In</a>
+            {% else %}
+            <a href="{% url 'user_orders' %}" class="mr-2 font-weight-bold"><i class="fas fa-user"></i> Profile</a><span class="font-weight-bold text-white mr-1">|</span>
+            <a href="{% url "logout" %}" class="mr-2 font-weight-bold">Logout</a>
+            {% endif %}
+      </div>
+    </nav>
+</div>
 
 <!-- main-menu -->
-<div class="bg-danger">
+<div class="bg-danger sticky-top">
   <div class="container">
     <nav class="navbar navbar-expand-md navbar-dark bg-danger">
       <a class="navbar-brand" href="{% url 'home' %}">
@@ -23,9 +30,9 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form class="form-inline my-2 my-lg-0 ml-auto searchBx">
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-          <button class="my-2 my-sm-0 search-btn" type="submit"><i class="fas fa-search"></i></button>
+        <form action={% url 'search_by' %} class="form-inline my-2 my-lg-0 ml-auto searchBx">
+          <input name="query" value="{{ request.GET.query }}" class="form-control" type="search" placeholder="Search Products..." aria-label="Search">
+          <button class="my-sm-0 search-btn" type="submit"><i class="fas fa-search"></i></button>
         </form>
 
         <ul class="navbar-nav ml-auto">

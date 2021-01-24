@@ -1,0 +1,81 @@
+{% extends "Store/base.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/order_process.css' %}">
+
+<div class="container my-5">
+    <div class="card p-3 mb-2">
+        <h4 class="font-weight-bold">GNG2020</h4>
+        <p>CREATED AT Jan 22 2021, 11:27 A.M</p>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="card p-3">
+                    <h5 class="mb-3 text-muted">Ordered From</h5>
+                    <div class="order-from">
+                        <div class="site-logo mr-2">
+                            <img src="{% static 'images/logo.jpg' %}">
+                        </div>
+                        <div class="site-title align-self-center">
+                            <h4 class="font-weight-bold">SITE TITLE</h4>
+                        </div>
+                    </div>
+
+                    <p class="text-muted mt-3 mb-1">Mirpur-10, Shah ALi Plaza</p>
+                    <p class="text-danger"><i class="fas fa-mobile mobile-icon"></i> 01XXXXXXXXXXX</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="card p-3">
+                    <h5 class="mb-3 text-muted">Bills To</h5>
+
+                    <h4 class="font-weight-bold person-info">
+                        <i class="fas fa-user mr-1"></i>Person
+                    </h4>
+
+                    <div class="person-details text-muted mt-2">
+                        <p class="mb-1"><i class="fas fa-mobile mobile-icon"></i> 01XXXXXXXXXXX</p>
+                        <p>Address: Mirpur, Dhaka</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-3">
+        <h4 class="font-weight-bold">Product Description</h4>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><img class="product-img" src="{% static 'images/logo.jpg' %}"></th>
+              <td class="align-middle">Smart Phone</td>
+              <td class="align-middle">2</td>
+              <td class="align-middle">MYR. 2000</td>
+            </tr>
+          </tbody>
+
+          <tfoot>
+              <td class="text-muted">Order Status: <span class="p-1 text-white bg-danger">Unpaid</span></td>
+              <td class="text-muted">Total: MYR. 2000</td>
+              <td class="text-muted">Due: MYR. 2000</td>
+              <td><a href="#"><button class="btn btn-danger">Make Payment</button></a></td>
+          </tfoot>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,13 @@
 from django.db import models
 
+from django.db.models.signals import pre_save
+from .random_order_id_gen import random_id_generator
 # Create your models here.
+
+def unique_order_id_generator(instance, new_id=None):
+    if new_id is not None:
+        return new_id
+    return random_id_generator(6)
 
 
 class Category(models.Model):
@@ -32,6 +39,11 @@ class Brand(models.Model):
 
 class UOM(models.Model):
     title = models.CharField(max_length=100)
+    height = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)
+    width = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)
+    weight = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)
+    length = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)
+    quantity = models.IntegerField(null=True, default=1)
 
     def __str__(self):
         return self.title
@@ -77,37 +89,63 @@ class Product(models.Model):
     product_other_images = models.ManyToManyField(ProductImages, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
-    price = models.IntegerField(null=True)
-    discount_price = models.IntegerField(null=True, blank=True)
-    size = models.ManyToManyField(ProductSizes, blank=True)
-    height = models.IntegerField(null=True, blank=True)
-    weight = models.IntegerField(null=True, blank=True)
-    length = models.IntegerField(null=True, blank=True)
-    color = models.ManyToManyField(ProductColors, blank=True)
+    price = models.IntegerField(null=True, default=0)
+    discount_price = models.IntegerField(null=True, blank=True, default=0)
+    discount_percentage = models.IntegerField(null=True, blank=True, default=0)
+    # size = models.ManyToManyField(ProductSizes, blank=True)
+    # height = models.IntegerField(null=True, blank=True)
+    # weight = models.IntegerField(null=True, blank=True)
+    # length = models.IntegerField(null=True, blank=True)
+    # color = models.ManyToManyField(ProductColors, blank=True)
+    uoms = models.ManyToManyField(UOM)
     stock = models.BooleanField()
     SKU = models.CharField(max_length=150)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
-    # @staticmethod
-    # def discount_precent():
-
-
-
-
     def __str__(self):
         return self.name
 
 
+    # def save(self, *args, **kwargs):
+    #     if uoms == 'CTN':
+    #         self.price = self.price * 10
+    #         return self.price
+    #     else:
+    #         self.price = self.price * 1
+    #         return self.price
+    #     super().save(*args, **kwargs)
     def get_products_id(ids):
         return Product.objects.filter(id__in=ids)
 
+
+# Discount precentage create signal
+def discount_precentage_receiver(sender, instance, *args, **kwargs):
+    if not instance.discount_percentage and instance.discount_price and instance.price:
+        if instance.discount_price > 0:
+            instance.discount_percentage = 100 - abs((instance.discount_price / instance.price) * 100)
+        else:
+            instance.discount_percentage = 0
+        instance.save()
+
+pre_save.connect(discount_precentage_receiver, sender=Product)
+
+
+# Discount precentage remover signal
+def discount_precentage_remover(sender, instance, *args, **kwargs):
+    if instance.discount_percentage and not instance.discount_price:
+        instance.discount_percentage = 0
+        instance.save()
+
+pre_save.connect(discount_precentage_remover, sender=Product)
+
+
 class Customer(models.Model):
-    username = models.CharField(max_length=155)
+    username = models.CharField(max_length=155, null=True)
     # first_name = models.CharField(max_length=10)
     # last_name = models.CharField(max_length=10)
-    email = models.CharField(max_length=155)
-    password = models.CharField(max_length=155)
+    email = models.CharField(max_length=155, unique=True, null=True)
+    password = models.CharField(max_length=155, null=True)
 
 
     def __str__(self):
@@ -155,23 +193,20 @@ class Order(models.Model):
 
     product = models.ForeignKey(
         Product, null=True, on_delete=models.CASCADE, related_name="product")
-    quantity = models.IntegerField(default=1, null=True)
-    invoice = models.AutoField(primary_key=True, blank=True)
+    quantity = models.IntegerField(default=0, null=True)
+    invoice = models.CharField(max_length=10, null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer")
-    phone = models.CharField(max_length=12)
-    address = models.CharField(max_length=150)
+    phone = models.CharField(max_length=12, null=True)
+    address = models.CharField(max_length=150, null=True)
     price = models.IntegerField(null=True, blank=True)
-    disc_price = models.IntegerField(null=True, blank=True)
-    f_name = models.CharField(max_length=100)
+    f_name = models.CharField(max_length=100, null=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True, related_name="city")
     method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, null=True, blank=True, related_name="method")
     order_status = models.CharField(null=True, blank=True, choices=STATUS, default="PENDING", max_length=155)
-    total = models.IntegerField()
+    total = models.IntegerField(default=0, null=True)
 
     def save(self, *args, **kwargs):
-        if self.disc_price:
-            self.total = self.disc_price * self.quantity
-        else:
+        if self.price:
             self.total = self.price * self.quantity
         super().save(*args, **kwargs)
 
@@ -189,7 +224,14 @@ class Order(models.Model):
 
     @staticmethod
     def get_orders_by_customer(customer):
-        return Order.objects.filter(customer=customer['id'])
+        if customer:
+            return Order.objects.filter(customer=customer['id'])
+
+def pre_save_order_id_recciever(sender, instance, *args, **kwargs):
+    if not instance.invoice:
+        instance.invoice = unique_order_id_generator(instance)
+
+pre_save.connect(pre_save_order_id_recciever, sender=Order)
 
 
 class Slider(models.Model):
@@ -198,6 +240,8 @@ class Slider(models.Model):
 
     def __str__(self):
         return self.title
+
+
 class Bundle(models.Model):
     title = models.CharField(max_length=100, blank=True)
     bundle_img = models.ImageField(upload_to='images/', blank=True)

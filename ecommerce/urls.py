@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from store import views
-from store.views import Home, Cart, Checkout, Search, Register, Login, UserOrders, logout, Product_details, AllProd, TopProd, NewProd
+from store.views import (Home, Cart, Checkout, Search, Register, Login, UserOrders,
+                        logout, Product_details, AllProd, TopProd, NewProd, OrderProcess)
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -39,7 +40,7 @@ urlpatterns = [
 
 
     ## Searc Form Functions to search by products
-    path('search_by_product/', Search.as_view(), name="search_by"),
+    path('search/', Search.as_view(), name="search_by"),
     # All product page url
     path('all-products/', AllProd.as_view(), name="allProd"),
     # Top product page url
@@ -54,6 +55,9 @@ urlpatterns = [
 
     ## Showing Customers Orders By their own Id
 
-    path('user_orders/', UserOrders.as_view(), name="user_orders"),
+    # User dashboard
+    path('user-dashboard/', UserOrders.as_view(), name="user_orders"),
+    # Order process
+    path("order-process/", OrderProcess.as_view(), name="order_process"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

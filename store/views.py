@@ -17,9 +17,10 @@ class Home(View):
         if not cart:
             request.session['cart'] = {}
 
-        products = Product.objects.all()
+        sliders = Slider.objects.all().order_by("-id")[:2]
+        products = Product.objects.all().order_by("-id")
         cats = Category.objects.all()
-        args = {'products':products, 'cats':cats}
+        args = {'products':products, 'cats':cats, "sliders": sliders}
         return render(self.request, 'Store/home.html', args)
 
     def post(self, request):
@@ -49,9 +50,35 @@ class Home(View):
 
 class Product_details(View):
     def get(self, request, slug):
+        uoms = UOM.objects.all()
         product = Product.objects.get(slug=slug)
-        args = {"product": product}
+        args = {"product": product, 'uoms':uoms}
         return render(self.request, 'Store/single_product.html', args)
+
+    def post(self, request):
+        product = request.POST.get('product')
+        cart = request.session.get('cart')
+        remove = request.POST.get('remove')
+        uom = request.POST.get('uom')
+
+        if cart:
+            quantity = cart.get(product, uom)
+
+            if quantity:
+                if remove:
+                    cart[product] = quantity - 1
+                else:
+                    cart[product] = quantity + 1
+            else:
+                cart[product] = 1
+            if cart[product] < 1:
+                cart.pop(product)
+        else:
+            cart = {}
+            cart[product] = 1
+        request.session['cart'] = cart
+
+        return redirect('cart')
 
 
 class Cart(View):
@@ -61,7 +88,7 @@ class Cart(View):
 
         if product_id in cart:
             if product.discount_price:
-                return product.price * cart[product_id]
+                return product.discount_price * cart[product_id]
             else:
                 return product.price * cart[product_id]
 
@@ -105,14 +132,14 @@ class Checkout(View):
         return render(self.request, 'Store/checkout.html', args)
 
     def post(self, request):
-        order = None
+        # order = None
         f_name = request.POST.get('f_name')
         phone = request.POST.get('phone')
         address = request.POST.get('address')
         city = request.POST.get('city')
         method = request.POST.get('method')
         cart = request.session.get('cart')
-        customer = request.session.get('customer')
+        customer = request.session.get('customer', None)
         products = Product.get_products_id(list(cart.keys()))
 
         city = City.objects.get(name=city)
@@ -309,28 +336,33 @@ def logout(request):
     return redirect('home')
 
 
-
 class UserOrders(View):
     def map_func(self, product):
         cart = self.request.session.get('cart', None)
         product_id = str(product.id)
+        if cart is not None:
+            if product_id in cart:
+                if not product.disc_price:
 
-        if product_id in cart:
-            if not product.disc_price:
-
-                return product.price * cart[product_id]
-            else:
-                return product.disc_price * cart[product_id]
+                    return product.price * cart[product_id]
+                else:
+                    return product.disc_price * cart[product_id]
 
     def get(self, request):
         customer = request.session.get('customer')
         user_orders = Order.get_orders_by_customer(customer)
         print(user_orders)
-        args = {'user_orders': user_orders}
-        return render(self.request, 'Home/all_orders.html', args)
+        if user_orders is None or customer is None:
+            return redirect("login")
+
+        args = {'user_orders': user_orders, "customer": customer}
+        return render(self.request, 'Store/user_dashboard.html', args)
 
 
-
+class OrderProcess(View):
+    def get(self, request):
+        args = {}
+        return render(self.request, "Store/order_process.html", args)
 
 
 ## Payment View

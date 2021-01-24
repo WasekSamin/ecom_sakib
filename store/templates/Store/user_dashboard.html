@@ -1,0 +1,68 @@
+{% extends "Store/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+
+<link rel="stylesheet" href="{% static 'css/user_dashboard.css' %}">
+
+<div class="container my-4">
+    <div class="card p-3 dashboard-card">
+        <form>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 sidebar-list">
+                <div class="list-group" id="list-tab" role="tablist">
+                  <a class="list-group-item list-group-item-action active" id="list-account-list" data-toggle="list" href="#list-account" role="tab" aria-controls="account"><i class="fas fa-user"></i> Account</a>
+                  <a class="list-group-item list-group-item-action" id="list-order-list" data-toggle="list" href="#list-order" role="tab" aria-controls="order"><span class="iconify" data-icon="feather:box" data-inline="false"></span> Order</a>
+                  <a class="list-group-item list-group-item-action" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                <div class="tab-content" id="nav-tabContent">
+                  <div class="tab-pane fade show active" id="list-account" role="tabpanel" aria-labelledby="list-account-list">
+                      <p class="user-info font-weight-bold mb-1">Username: <span class="text-muted">{{ customer.username }}</span></p>
+                      <p class="user-info font-weight-bold">Email: <span class="text-muted">{{ customer.email }}</span></p>
+                  </div>
+                  <div class="tab-pane fade" id="list-order" role="tabpanel" aria-labelledby="list-order-list">
+                      {% if user_orders %}
+                        <table class="table table-responsive-sm">
+                          <thead class="thead-dark">
+                            <tr class="text-center order-title">
+                              <th scope="col">Order ID</th>
+                              <th scope="col">Total</th>
+                              <th scope="col">Payment Method</th>
+                              <th scope="col">Payment Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                                {% for order in user_orders %}
+                                    <tr class="text-center user-order-text">
+                                      <td>{{ order.invoice }}</td>
+                                      <td>MYR. {{ order.total }}</td>
+                                      <td>
+                                          <select class="custom-select d-block w-100" id="currency" name="currency" required>
+                                                <option value="Stripe">Stripe</option>
+                                                <option value="Paypal">Paypal</option>
+                                                <option value="Razor">Razor</option>
+                                          </select>
+                                      </td>
+                                      <td><a href="#"><button class="btn btn-sm btn-danger">Make Payment</button></a></td>
+                                    </tr>
+                                {% endfor %}
+                          </tbody>
+                        </table>
+                      {% else %}
+                      <div class="card py-3">
+                          <h5 class="text-center">Order cart is empty!</h5>
+                      </div>
+                      {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

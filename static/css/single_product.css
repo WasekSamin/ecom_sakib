@@ -1,11 +1,14 @@
 .single_product_container {
-    margin-top: 80px;
-    margin-bottom: 50px;
+    margin-top: 60px;
+    margin-bottom: 80px!important;
 }
 
 #img-container img {
+    position: relative;
     width: 475px;
     height: 500px;
+    display: block;
+    margin: 0 auto;
     object-fit: cover;
 }
 
@@ -13,8 +16,16 @@
     font-size: 20px;
 }
 
-.prod-title, .prod-price, .prod-disc-price {
+.prod-title, .prod-price {
     font-size: 1.7rem;
+}
+
+.prod-badge {
+    position: absolute;
+    right: 8%;
+    top: 1%;
+    font-size: 1.5rem;
+    z-index: 1;
 }
 
 .cross-product-price {
@@ -29,6 +40,10 @@
     #img-container img {
         max-width: 100%;
     }
+
+    .prod-badge {
+        right: 4%;
+    }
 }
 
 @media screen and (max-width: 991px) {
@@ -36,18 +51,26 @@
         height: 450px;
     }
 
+    .prod-badge {
+        right: 5%;
+    }
+
     .prod-title {
         font-size: 1.5rem;
     }
 
-    .prod-price, .prod-disc-price {
-        font-size: 1.25rem;
+    .prod-price {
+        font-size: 1.5rem;
     }
 }
 
 @media screen and (max-width: 767px) {
     #img-container img {
         height: 400px;
+    }
+
+    .prod-badge {
+        right: 4%;
     }
 
     .product-desc {
@@ -63,6 +86,12 @@
 @media screen and (max-width: 576px) {
     #img-container img {
         height: 300px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .prod-badge {
+        right: 7%;
     }
 }
 

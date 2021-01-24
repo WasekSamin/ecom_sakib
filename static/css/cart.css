@@ -47,6 +47,10 @@ td img {
     object-fit: cover;
 }
 
+.cart-form {
+    position: relative;
+}
+
 .min-btn, .add-btn {
     margin-top: 5px;
     color: #fff;
@@ -58,14 +62,19 @@ td img {
     outline: none;
 }
 
+.cart-btn {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+}
+
 .min-btn {
-    padding: 2px 7px;
+    padding: 1px 8px;
     margin-right: 8px;
 }
 
 .add-btn {
-    padding-top: 1px;
-    padding-bottom: 1px;
+    padding: 1px 6px;
 }
 
 .total-price {
