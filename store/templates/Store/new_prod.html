@@ -31,14 +31,14 @@
                             {% csrf_token %}
                             <input hidden type="text" name="product" value="{{product.id}}">
 
-                            <!--Order input-btn-->
-                            <div class="input-btn mb-3 pl-3">
-                                <button type="submit" class="btn btn-danger submit-button"><i class="fas fa-shopping-cart"></i> Add To Cart</button>
+                            <!--Wishlist button-->
+                            <div class="input-btn mb-3 align-self-center pl-3">
+                                <i class="far fa-heart"></i>
                             </div>
 
-                            <!--Wishlist button-->
-                            <div class="input-btn mb-3 align-self-center pr-3">
-                                <i class="far fa-heart"></i>
+                            <!--Order input-btn-->
+                            <div class="input-btn mb-3 pr-3">
+                                <button type="submit" class="btn btn-danger submit-button"><i class="fas fa-shopping-cart"></i> Add To Cart</button>
                             </div>
                         </form>
 

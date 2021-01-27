@@ -27,6 +27,7 @@ class Home(View):
         product = request.POST.get('product')
         cart = request.session.get('cart')
         remove = request.POST.get('remove')
+        # uom = reqeuest.POST.get('uom')
 
         if cart:
             quantity = cart.get(product)
@@ -50,9 +51,8 @@ class Home(View):
 
 class Product_details(View):
     def get(self, request, slug):
-        uoms = UOM.objects.all()
         product = Product.objects.get(slug=slug)
-        args = {"product": product, 'uoms':uoms}
+        args = {"product": product}
         return render(self.request, 'Store/single_product.html', args)
 
     def post(self, request):
@@ -62,7 +62,7 @@ class Product_details(View):
         uom = request.POST.get('uom')
 
         if cart:
-            quantity = cart.get(product, uom)
+            quantity = cart.get(product)
 
             if quantity:
                 if remove:

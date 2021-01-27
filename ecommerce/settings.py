@@ -26,7 +26,7 @@ SECRET_KEY = '-+e6-o-k!(01)y*_jee83!$j_#b)0zua-ewh-dd*5l5w4)ap-7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['admin47.pythonanywhere.com']
+ALLOWED_HOSTS = ['admin50.pythonanywhere.com']
 
 
 # Application definition
@@ -120,7 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/admin47/ecom_sakib/static'
+STATIC_ROOT = '/home/admin50/ecommerce_sakib/static'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_URL = "/images/"

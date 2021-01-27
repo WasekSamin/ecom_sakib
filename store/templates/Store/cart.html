@@ -23,7 +23,6 @@
           {% for product in cart_products %}
           <tr>
             <td>
-                <h3>{{product.uoms.title}}</h3>
               <div class="cart-info">
                 <a class="prod-links" href="{% url 'Product_details' product.slug %}">
                     <img src="{{ product.product_main_image.url }}" alt="">

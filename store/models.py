@@ -67,6 +67,13 @@ class ProductColors(models.Model):
         return self.cl_name
 
 
+class ProductSpces(models.Model):
+    spec_title = models.CharField(max_length=155)
+
+    def __str__(self):
+        return self.spec_title
+
+
 class ProductSizes(models.Model):
     SIZES = [
             ("S", "S"),
@@ -92,11 +99,12 @@ class Product(models.Model):
     price = models.IntegerField(null=True, default=0)
     discount_price = models.IntegerField(null=True, blank=True, default=0)
     discount_percentage = models.IntegerField(null=True, blank=True, default=0)
-    # size = models.ManyToManyField(ProductSizes, blank=True)
+    size = models.ManyToManyField(ProductSizes, blank=True)
     # height = models.IntegerField(null=True, blank=True)
     # weight = models.IntegerField(null=True, blank=True)
     # length = models.IntegerField(null=True, blank=True)
-    # color = models.ManyToManyField(ProductColors, blank=True)
+    color = models.ManyToManyField(ProductColors, blank=True)
+    spec = models.ManyToManyField(ProductSpces, blank=True)
     uoms = models.ManyToManyField(UOM)
     stock = models.BooleanField()
     SKU = models.CharField(max_length=150)

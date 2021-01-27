@@ -25,48 +25,72 @@
                 <p class="text-muted mb-1">Category: {{ product.category }}</p>
                 <p class="text-muted">SKU: {{ product.SKU }}</p>
                 {% if not product.discount_price %}
-                    <h5 class="prod-price mb-3"><span class="text-danger">Price:</span> {{ product.price }} RM.</h5>
+                    <h5 class="prod-price mb-3"><span class="text-danger font-weight-bold">Price : </span>MYR. {{ product.price }}</h5>
                 {% else %}
-                    <p class="text-muted cross-product-price mb-1">Price: {{ product.price }} RM.</p>
-                    <h5 class="font-weight-bold prod-price mb-3"><span class="text-danger">Price:</span> {{ product.discount_price }} RM.</h5>
+                    <p class="text-muted cross-product-price mb-1">Price : MYR. {{ product.price }}</p>
+                    <h5 class="font-weight-bold prod-price mb-3"><span class="text-danger">Price:</span> MYR. {{ product.discount_price }}</h5>
                 {% endif %}
                 <form class="my-3" action="/" method="POST">
                 <!--UOM Select Method -->
 
 
+                <div class="row mb-lg-3">
+                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-6 col-xl-4">
+                        <span class="font-weight-bold qty-text">Quantity : </span>
+                    </div>
 
-                <select class="custom-select d-block w-100" id="size" name="uom" required>
-                    {% for s in product.uoms.all %}
-                        <option value="{{ s.title }}">{{ s.title }}</option>
-                    {% endfor %}
-                </select>
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6 col-xl-4 qty-button-margin">
+                        <button class="btn btn-dark product-button">-</button>
+                        <span class="font-weight-bold qty px-1">1</span>
+                        <button class="btn btn-dark product-button">+</button>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 align-self-center product-uom">
+                        <select class="custom-select d-block w-100" id="uom" name="uom" required>
+                            {% for s in product.uoms.all %}
+                                <option value="{{ s.title }}">{{ s.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
 
 
+                {% if product.size.all|length != 0 or product.color.all|length != 0 or product.spec.all|length != 0 %}
+                    <div class="row my-3">
+                        {% if product.size.all|length != 0 %}
+                            <div class="col-xs-12 col-sm-12 col-md-4 sizes">
+                                <label class="font-weight-bold" for="size">Sizes</label>
+                                <select class="custom-select d-block w-100" id="size" name="size" required>
+                                    {% for item in product.size.all %}
+                                        <option value="{{ item.size_name }}">{{ item.size_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
 
-                <!--{% if product.size.all|length != 0 or product.color.all|length != 0 %}-->
-                <!--    <div class="row my-3">-->
-                <!--        {% if product.size.all|length != 0 %}-->
-                <!--            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 sizes">-->
-                <!--                <label class="font-weight-bold" for="size">Sizes</label>-->
-                <!--                <select class="custom-select d-block w-100" id="size" name="size" required>-->
-                <!--                    {% for s in product.size.all %}-->
-                <!--                        <option value="{{ s.size_name }}">{{ s.size_name }}</option>-->
-                <!--                    {% endfor %}-->
-                <!--                </select>-->
-                <!--            </div>-->
-                <!--        {% endif %}-->
-                <!--        {% if product.color.all|length != 0 %}-->
-                <!--        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">-->
-                <!--            <label class="font-weight-bold" for="color">Colors</label>-->
-                <!--            <select class="custom-select d-block w-100" id="color" name="color" required>-->
-                <!--                {% for c in product.color.all %}-->
-                <!--                    <option value="{{ c.cl_name }}">{{ c.cl_name }}</option>-->
-                <!--                {% endfor %}-->
-                <!--            </select>-->
-                <!--        </div>-->
-                <!--        {% endif %}-->
-                <!--    </div>-->
-                <!--{% endif %}-->
+                        {% if product.color.all|length != 0 %}
+                            <div class="col-xs-12 col-sm-12 col-md-4 sizes">
+                                <label class="font-weight-bold" for="color">Colors</label>
+                                <select class="custom-select d-block w-100" id="color" name="color" required>
+                                    {% for item in product.color.all %}
+                                        <option value="{{ item.cl_name }}">{{ item.cl_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+
+                        {% if product.spec.all|length != 0 %}
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+                                <label class="font-weight-bold" for="specs">Specs</label>
+                                <select class="custom-select d-block w-100" id="specs" name="specs" required>
+                                    {% for item in product.spec.all %}
+                                        <option value="{{ item.spec_title }}">{{ item.spec_title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
 
                 <!--<form class="my-3" action="/" method="POST">-->
                     {% csrf_token %}

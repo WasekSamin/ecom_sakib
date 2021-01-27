@@ -73,18 +73,15 @@
 
 .prod-images img {
     position: relative;
-    padding: 10px;
-    max-width: 100%;
+    width: 100%;
     height: 180px;
-    display: block;
-    margin: auto;
-    object-fit: contain;
+    margin-bottom: 15px;
+    object-fit: cover;
 }
 
 .prod-badge {
     position: absolute;
     right: 2%;
-    top: 1%;
     font-size: 1.3rem;
     z-index: 1;
 }
@@ -145,7 +142,7 @@
 }
 
 .input-btn .submit-button {
-    width: 150%!important;
+    width: 100%!important;
 }
 
 .input-btn .fa-heart {
