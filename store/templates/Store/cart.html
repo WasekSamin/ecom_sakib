@@ -10,7 +10,7 @@
   <h2 class="pt-5 pb-4">Shopping Cart</h2>
   <div class="small-container cart-page">
     <div class="card">
-    {% if cart_products %}
+    {% if cart_items %}
       <table class="table">
         <thead>
           <tr>
@@ -20,22 +20,21 @@
           </tr>
         </thead>
         <tbody>
-          {% for product in cart_products %}
+          {% for product in cart_items %}
           <tr>
             <td>
               <div class="cart-info">
-                <a class="prod-links" href="{% url 'Product_details' product.slug %}">
-                    <img src="{{ product.product_main_image.url }}" alt="">
-                </a>
+                
               <div>
-                  <a class="prod-links" href="{% url 'Product_details' product.slug %}">
-                    <p class="font-weight-bold text-dark">{{ product.name }}</p>
-                  </a>
+                  
+                    <p class="font-weight-bold text-dark">{{ product.product.name }}</p>
+                    {{product.product.uom}}
+                  
                   <a class="btn btn-sm btn-danger" href="#"><i class="fas fa-trash-alt" style="font-size: 20px"></i></a>
                 </div>
               </div>
             </td>
-            <td class="align-middle cart-form"><input class="text-center form-control" type="text" min="0" name="quantity" id="quantity" value="{{product|cart_quantity:request.session.cart}}">
+            
                 <div class="cart-btn">
                     <!--Sub button-->
                     <form action="/" method="POST">
@@ -52,7 +51,7 @@
                     </form>
                 </div>
             </td>
-            <td class="font-weight-bold align-middle">{{ product|cart_total:request.session.cart }} RM.</td>
+            
           </tr>
 
           {% endfor %}
@@ -67,7 +66,7 @@
           <!--</tr>-->
           <tr>
             <td class="font-weight-bold cart-total-price">TOTAL</td>
-            <td class="font-weight-bold">{{total}} RM.</td>
+            <td class="font-weight-bold">{{cart.total}} RM.</td>
           </tr>
           <tr>
               {% if request.session.customer %}

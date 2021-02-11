@@ -1,7 +1,7 @@
 from django.contrib import admin
 from store.models import (Category, Brand, UOM, ProductImages, Product, Customer,
                         City, Order, SubCategory, Currency, DeliveryMethod, ProductColors,
-                        ProductSizes, Slider, ProductSpces)
+                        ProductSizes, Slider, ProductSpces, Cart)
 # Register your models here.
 
 
@@ -24,3 +24,4 @@ admin.site.register(ProductColors)
 admin.site.register(ProductSizes)
 admin.site.register(ProductSpces)
 admin.site.register(Slider)
+admin.site.register(Cart)

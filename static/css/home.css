@@ -157,10 +157,6 @@
         grid-template-columns: 15.78% 15.78% 15.78% 15.78% 15.78% 15.78%;
     }
 
-    .input-btn .submit-button {
-        width: 120%!important;
-    }
-
     .input-btn .fa-heart {
         font-size: 1.3rem;
     }

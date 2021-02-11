@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from store import views
-from store.views import (Home, Cart, Checkout, Search, Register, Login, UserOrders,
+from store.views import (Home, CartView, Checkout, Search, Register, Login, UserOrders,
                         logout, Product_details, AllProd, TopProd, NewProd, OrderProcess)
 from django.conf.urls.static import static
 
@@ -33,7 +33,7 @@ urlpatterns = [
     ## Cart View
 
 
-    path('cart/', Cart.as_view(), name="cart"),
+    path('cart/', CartView.as_view(), name="cart"),
 
     ## Checkout View FOr Customers
     path('checkout/', Checkout.as_view(), name="checkout"),

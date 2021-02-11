@@ -24,6 +24,13 @@ def cart_quantity(product, cart):
 
 	return quantity
 
+# @register.filter(name='get_uom')
+# def get_uom(product,cart):
+#     if product.uom:
+#         return HttpResponse("UOM ase")
+
+
+
 @register.filter(name='cart_total')
 def cart_total(product, cart):
     if product.discount_price:

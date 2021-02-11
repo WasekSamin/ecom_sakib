@@ -25,26 +25,47 @@ class Home(View):
 
     def post(self, request):
         product = request.POST.get('product')
-        cart = request.session.get('cart')
-        remove = request.POST.get('remove')
-        # uom = reqeuest.POST.get('uom')
+        # cart = request.session.get('cart')
+        # remove = request.POST.get('remove')
+        uom = request.POST.get('uom')
+        size = request.POST.get('size')
+        color = request.POST.get('color')
+        specs = request.POST.get('specs')
+        cart = Cart.objects.get_or_new(request=request)
 
-        if cart:
-            quantity = cart.get(product)
+        # print(uom)
+        # print(color)
+        # print(size)
+        # print(specs)
+        # print(cart)
 
-            if quantity:
-                if remove:
-                    cart[product] = quantity - 1
-                else:
-                    cart[product] = quantity + 1
-            else:
-                cart[product] = 1
-            if cart[product] < 1:
-                cart.pop(product)
-        else:
-            cart = {}
-            cart[product] = 1
-        request.session['cart'] = cart
+
+
+
+        cart_items = CartItem(cart=cart, product_id=product, uom_id=uom, qty=1, size_id=size, color_id=color, spec_id=specs)
+        cart_items.save()
+        product = Product.objects.get(id=product)
+
+        total = list(map(lambda item: item.product.price * item.qty, CartItem.objects.filter(cart=cart)))
+        total = sum(total)
+
+        Cart.objects.filter(id=cart.id).update(total=total)
+
+        # if cart:
+        #     quantity = cart.get(product)
+
+        #     if quantity:
+        #         if remove:
+        #             cart[product] = quantity - 1
+        #         else:
+        #             cart[product] = quantity + 1
+        #     else:
+        #         cart[product] = 1
+        #     if cart[product] < 1:
+        #         cart.pop(product)
+        # else:
+        #     cart[product] = 1
+        # request.session['cart'] = cart
 
         return redirect('cart')
 
@@ -52,59 +73,46 @@ class Home(View):
 class Product_details(View):
     def get(self, request, slug):
         product = Product.objects.get(slug=slug)
+        print(request.session.get("cart"))
+
         args = {"product": product}
         return render(self.request, 'Store/single_product.html', args)
 
-    def post(self, request):
-        product = request.POST.get('product')
-        cart = request.session.get('cart')
-        remove = request.POST.get('remove')
-        uom = request.POST.get('uom')
+    # def post(self, request):
+    #     product = request.POST.get('product')
+    #     cart = request.session.get('cart')
+    #     remove = request.POST.get('remove')
+    #     # uom = request.POST.get('uom')
 
-        if cart:
-            quantity = cart.get(product)
+    #     if cart:
+    #         quantity = cart.get(product)
 
-            if quantity:
-                if remove:
-                    cart[product] = quantity - 1
-                else:
-                    cart[product] = quantity + 1
-            else:
-                cart[product] = 1
-            if cart[product] < 1:
-                cart.pop(product)
-        else:
-            cart = {}
-            cart[product] = 1
-        request.session['cart'] = cart
+    #         if quantity:
+    #             if remove:
+    #                 cart[product] = quantity - 1
+    #             else:
+    #                 cart[product] = quantity + 1
+    #         else:
+    #             cart[product] = 1
+    #         if cart[product] < 1:
+    #             cart.pop(product)
+    #     else:
+    #         cart[product] = 1
+    #     request.session['cart'] = cart
 
-        return redirect('cart')
-
-
-class Cart(View):
-    def map_function(self, product):
-        cart = self.request.session.get('cart', None)
-        product_id = str(product.id)
-
-        if product_id in cart:
-            if product.discount_price:
-                return product.discount_price * cart[product_id]
-            else:
-                return product.price * cart[product_id]
+    #     return redirect('cart')
 
 
-
+class CartView(View):
     def get(self, request):
-        if request.session.get('cart') is not None:
-            ids = list(request.session.get('cart').keys())
-            cart_products = Product.get_products_id(ids)
-            product_prices = list(map(self.map_function, cart_products))
-            total = sum(product_prices)
-            args = {'cart_products':cart_products, 'total':total}
-            return render(self.request, 'Store/cart.html', args)
-        else:
 
-            return render(self.request, 'Store/cart.html')
+        cart = Cart.objects.get_or_new(request=request)
+
+        args = {'cart': cart, 'cart_items':cart.cartitem_set.all()}
+        return render(self.request, 'Store/cart.html', args)
+
+
+
 
 
 class Checkout(View):
@@ -120,15 +128,18 @@ class Checkout(View):
 
 
     def get(self, request):
-        args = {}
-        if request.session.get('cart') is not None:
-            ids = list(request.session.get('cart').keys())
-            cart_products = Product.get_products_id(ids)
-            product_prices = list(map(self.map_function, cart_products))
-            total = sum(product_prices)
-            cities = City.objects.all()
-            deliveries = DeliveryMethod.objects.all()
-            args = {'cart_products':cart_products, 'total': total, "cities": cities, "deliveries": deliveries}
+        # args = {}
+        # if request.session.get('cart') is not None:
+        #     ids = list(request.session.get('cart').keys())
+        #     cart_products = Product.get_products_id(ids)
+        #     product_prices = list(map(self.map_function, cart_products))
+        #     total = sum(product_prices)
+        #     cities = City.objects.all()
+        #     deliveries = DeliveryMethod.objects.all()
+        #     args = {'cart_products':cart_products, 'total': total, "cities": cities, "deliveries": deliveries}
+        # return render(self.request, 'Store/checkout.html', args)
+        cart_products = Cart.objects.get_or_new(request=request)
+        args = {'cart_products': cart_products, 'cart_items': cart_products.cartitem_set.all()}
         return render(self.request, 'Store/checkout.html', args)
 
     def post(self, request):
@@ -182,29 +193,28 @@ class AllProd(View):
         args = {'products': products, 'page_obj': page_obj}
         return render(self.request, 'Store/all_prod.html', args)
 
-    def post(self, request):
-        product = request.POST.get('product')
-        cart = request.session.get('cart')
-        remove = request.POST.get('remove')
+    # def post(self, request):
+    #     product = request.POST.get('product')
+    #     cart = request.session.get('cart')
+    #     remove = request.POST.get('remove')
 
-        if cart:
-            quantity = cart.get(product)
+    #     if cart:
+    #         quantity = cart.get(product)
 
-            if quantity:
-                if remove:
-                    cart[product] = quantity - 1
-                else:
-                    cart[product] = quantity + 1
-            else:
-                cart[product] = 1
-            if cart[product] < 1:
-                cart.pop(product)
-        else:
-            cart = {}
-            cart[product] = 1
-        request.session['cart'] = cart
+    #         if quantity:
+    #             if remove:
+    #                 cart[product] = quantity - 1
+    #             else:
+    #                 cart[product] = quantity + 1
+    #         else:
+    #             cart[product] = 1
+    #         if cart[product] < 1:
+    #             cart.pop(product)
+    #     else:
+    #         cart[product] = 1
+    #     request.session['cart'] = cart
 
-        return redirect('cart')
+    #     return redirect('cart')
 
 class TopProd(View):
     def get(self, request):
@@ -218,29 +228,28 @@ class TopProd(View):
         args = {'products': products, 'page_obj': page_obj}
         return render(self.request, 'Store/top_prod.html', args)
 
-    def post(self, request):
-        product = request.POST.get('product')
-        cart = request.session.get('cart')
-        remove = request.POST.get('remove')
+    # def post(self, request):
+    #     product = request.POST.get('product')
+    #     cart = request.session.get('cart')
+    #     remove = request.POST.get('remove')
 
-        if cart:
-            quantity = cart.get(product)
+    #     if cart:
+    #         quantity = cart.get(product)
 
-            if quantity:
-                if remove:
-                    cart[product] = quantity - 1
-                else:
-                    cart[product] = quantity + 1
-            else:
-                cart[product] = 1
-            if cart[product] < 1:
-                cart.pop(product)
-        else:
-            cart = {}
-            cart[product] = 1
-        request.session['cart'] = cart
+    #         if quantity:
+    #             if remove:
+    #                 cart[product] = quantity - 1
+    #             else:
+    #                 cart[product] = quantity + 1
+    #         else:
+    #             cart[product] = 1
+    #         if cart[product] < 1:
+    #             cart.pop(product)
+    #     else:
+    #         cart[product] = 1
+    #     request.session['cart'] = cart
 
-        return redirect('cart')
+    #     return redirect('cart')
 
 class NewProd(View):
     def get(self, request):
@@ -249,29 +258,28 @@ class NewProd(View):
         args = {'products': products}
         return render(self.request, 'Store/new_prod.html', args)
 
-    def post(self, request):
-        product = request.POST.get('product')
-        cart = request.session.get('cart')
-        remove = request.POST.get('remove')
+    # def post(self, request):
+    #     product = request.POST.get('product')
+    #     cart = request.session.get('cart')
+    #     remove = request.POST.get('remove')
 
-        if cart:
-            quantity = cart.get(product)
+    #     if cart:
+    #         quantity = cart.get(product)
 
-            if quantity:
-                if remove:
-                    cart[product] = quantity - 1
-                else:
-                    cart[product] = quantity + 1
-            else:
-                cart[product] = 1
-            if cart[product] < 1:
-                cart.pop(product)
-        else:
-            cart = {}
-            cart[product] = 1
-        request.session['cart'] = cart
+    #         if quantity:
+    #             if remove:
+    #                 cart[product] = quantity - 1
+    #             else:
+    #                 cart[product] = quantity + 1
+    #         else:
+    #             cart[product] = 1
+    #         if cart[product] < 1:
+    #             cart.pop(product)
+    #     else:
+    #         cart[product] = 1
+    #     request.session['cart'] = cart
 
-        return redirect('cart')
+    #     return redirect('cart')
 
 
 class Register(View):

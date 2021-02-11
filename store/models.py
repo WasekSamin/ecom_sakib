@@ -15,7 +15,7 @@ class Category(models.Model):
     slug = models.CharField(max_length=200)
     cat_image = models.ImageField(upload_to='images/')
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 ## Subcategory
@@ -24,7 +24,7 @@ class SubCategory(models.Model):
     sub_title = models.CharField(max_length=50)
     category_name = models.ForeignKey(Category, on_delete=models.CASCADE,null=True, blank=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.sub_title
 
 
@@ -34,7 +34,7 @@ class Brand(models.Model):
     slug = models.CharField(max_length=200)
     brand_image = models.ImageField(upload_to='images/')
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class UOM(models.Model):
@@ -45,32 +45,32 @@ class UOM(models.Model):
     length = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)
     quantity = models.IntegerField(null=True, default=1)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class ProductImages(models.Model):
     multi_images = models.ImageField(upload_to='images/')
 
-    def __str__(self):
+    def _str_(self):
         return str(self.multi_images)
 
 class Currency(models.Model):
     curr_sign = models.CharField(max_length=10)
 
-    def __str__(self):
+    def _str_(self):
         return self.curr_sign
 
 class ProductColors(models.Model):
     cl_name = models.CharField(max_length=155)
 
-    def __str__(self):
+    def _str_(self):
         return self.cl_name
 
 
 class ProductSpces(models.Model):
     spec_title = models.CharField(max_length=155)
 
-    def __str__(self):
+    def _str_(self):
         return self.spec_title
 
 
@@ -84,7 +84,7 @@ class ProductSizes(models.Model):
         ]
     size_name = models.CharField(max_length=50, null=True, blank=True, choices=SIZES)
 
-    def __str__(self):
+    def _str_(self):
         return self.size_name
 
 
@@ -107,11 +107,12 @@ class Product(models.Model):
     spec = models.ManyToManyField(ProductSpces, blank=True)
     uoms = models.ManyToManyField(UOM)
     stock = models.BooleanField()
+    quantity = models.IntegerField(null=True)
     SKU = models.CharField(max_length=150)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
 
@@ -156,7 +157,7 @@ class Customer(models.Model):
     password = models.CharField(max_length=155, null=True)
 
 
-    def __str__(self):
+    def _str_(self):
         return self.username
 
     def register(self):
@@ -171,23 +172,67 @@ class City(models.Model):
     name = models.CharField(max_length=100)
 
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
 
 class DeliveryMethod(models.Model):
     title = models.CharField(max_length=155)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class OrderStatus(models.Model):
     st_title = models.CharField(max_length=155, default="Pending")
 
 
-    def __str__(self):
+    def _str_(self):
         return self.st_title
 
+
+class CartManager(models.Manager):
+    def get_or_new(self, request):
+        session_cart = request.session.get('cart', None)
+        user = request.session.get('customer', None)
+
+        if user != '' and user is not None:
+            customer = Customer.objects.get(id=user['id'])
+            session_cart = self.filter(customer=customer)
+
+            if session_cart.exists():
+                session_cart = session_cart.last()
+            else:
+                session_cart = Cart(customer=customer)
+                session_cart.save()
+        else:
+            if session_cart != '' and session_cart is not None and session_cart != {}:
+                session_cart = self.get(id=session_cart)
+            else:
+                session_cart = Cart()
+                session_cart.save()
+
+        request.session['cart'] = session_cart.id
+
+        return session_cart
+
+
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    sub_total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    delivery_charge = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    objects = CartManager()
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    qty = models.PositiveIntegerField(null=True, blank=True)
+    size = models.ForeignKey(ProductSizes,on_delete=models.CASCADE, null=True, blank=True)
+    color = models.ForeignKey(ProductColors,on_delete=models.CASCADE, null=True, blank=True)
+    spec = models.ForeignKey(ProductSpces,on_delete=models.CASCADE, null=True, blank=True)
+    uom = models.ForeignKey(UOM,on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Order(models.Model):
@@ -246,7 +291,7 @@ class Slider(models.Model):
     title = models.CharField(max_length=100, null=True)
     img = models.ImageField(upload_to='images/', blank=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 
