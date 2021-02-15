@@ -1,80 +1,101 @@
-.cart-page {
-    margin: 20px auto;
-}
-
-table {
+.cart-table {
     width: 100%;
-    border-collapse: collapse;
 }
 
-.cart-info {
+.cart-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.cart-table table td {
+    border-bottom: 1px solid rgb(175, 146, 146);
+    padding: 8px;
+}
+
+.cart-table table tr:last-child td:nth-last-child(1),
+.cart-table table tr:last-child td:nth-last-child(2),
+.cart-table table tr:last-child td:nth-last-child(3),
+.cart-table table tr:last-child td:nth-last-child(4) {
+    border-bottom: none;
+}
+
+.cart-table table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #BB2D3B;
+    color: white;
+}
+
+.cart-table table th:last-child {
+    text-align: right;
+    padding-right: 0.5rem;
+}
+
+.prod-info {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
 }
 
-th {
-    text-align: left;
-    padding: 16px 10px!important;
-    color: #fff;
-    background-color: #C82333;
-    font-weight: bold;
-}
-
-td {
-    padding: 10px 5px;
-}
-
-td input {
-    width: 60px!important;
-    height: 30px!important;
-    padding: 5px;
-}
-
-td a {
-    color: #C82333;
-    font-size: 14px;
-}
-
-td a:hover {
-    color: #C82333;
-    text-decoration: none;
-}
-
-td img {
-    width: 100px;
-    height: 80px;
-    margin-right: 10px;
+.prod-img img {
+    width: 5rem;
+    height: 5rem;
     object-fit: cover;
 }
 
-.cart-form {
-    position: relative;
-}
-
-.min-btn, .add-btn {
-    margin-top: 5px;
+.delete-btn {
+    margin-top: 0.8rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.2rem;
+    background-color: #cf3b4a;
     color: #fff;
-    background-color: #23272B;
-    border-radius: 5px;
+    border: none;
+    transition: background-color 0.4s;
 }
 
-.min-btn:focus, .add-btn:focus {
+.delete-btn:focus {
+    border: none;
     outline: none;
 }
 
-.cart-btn {
-    position: absolute;
+.delete-btn:hover {
+    background-color: #BB2D3B;
+}
+
+.prod-qty {
     display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.qty-btn-section input {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.2rem;
+    background-color: #212529;
+    color: #fff;
+    border: none;
+}
+
+.qty-section {
+    width: 15rem;
+}
+
+.qty-btn-section input:focus {
+    border: none;
+    outline: none;
+}
+
+.prod-price {
+    line-height: 1.5rem;
+}
+
+.price-section {
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-}
-
-.min-btn {
-    padding: 1px 8px;
-    margin-right: 8px;
-}
-
-.add-btn {
-    padding: 1px 6px;
 }
 
 .total-price {
@@ -88,6 +109,10 @@ td img {
     max-width: 400px;
 }
 
+.total-price table td {
+    border-bottom: none;
+}
+
 td:last-child {
     text-align: right;
 }
@@ -97,5 +122,108 @@ th:last-child {
 }
 
 .cart-total-price {
-    font-size: 20px;
+    font-size: 1.5rem;
+}
+
+.cart-total {
+    font-size: 1.2rem;
+}
+
+@media screen and (max-width: 991px) {
+    .prod-desc h5 {
+        width: 20rem;
+        word-wrap: break-word;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .prod-desc h5 {
+        width: 10rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    
+    .prod-img img {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .qty-section {
+        width: 12rem;
+    }
+
+    .prod-price {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .prod-desc h5 {
+        width: 8rem;
+    }
+}
+
+@media screen and (max-width: 465px) {
+    .prod-desc h5 {
+        font-size: 1.2rem;
+        width: 6rem;
+    }
+
+    .quantity h5 {
+        font-size: 1.2rem;
+    }
+
+    .qty-btn-section input {
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .prod-img img {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .quantity h5 {
+        font-size: 1rem;
+    }
+
+    .prod-desc h5 {
+        width: 5rem;
+    }
+
+    .prod-name {
+        margin-left: 0!important;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .prod-desc h5 {
+        font-size: 1.1rem;
+        width: 4rem;
+    }
+}
+
+@media screen and (max-width: 345px) {
+    .prod-uom, .prod-price {
+        font-size: 0.9rem;
+    }
+
+    .prod-img img {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .qty-btn-section input {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .prod-uom, .prod-price {
+        font-size: 0.8rem;
+    }
 }

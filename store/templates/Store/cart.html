@@ -1,72 +1,84 @@
 {% extends 'Store/base.html' %}
 
+{% load mathfilters %}
+
 {% load static %}
 {% load cart %}
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 
-<div class="container mb-4">
-  <h2 class="pt-5 pb-4">Shopping Cart</h2>
-  <div class="small-container cart-page">
-    <div class="card">
-    {% if cart_items %}
-      <table class="table">
+<div class="container my-4">
+  <div class="pt-5 pb-4">
+    <h2>Shopping Cart</h2>
+  </div>
+
+  {% if cart_items %}
+    <div class="cart-table">
+      <table>
         <thead>
-          <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-          </tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>UOM</th>
+          <th>Price</th>
         </thead>
+
         <tbody>
           {% for product in cart_items %}
-          <tr>
-            <td>
-              <div class="cart-info">
-                
-              <div>
-                  
-                    <p class="font-weight-bold text-dark">{{ product.product.name }}</p>
-                    {{product.product.uom}}
-                  
-                  <a class="btn btn-sm btn-danger" href="#"><i class="fas fa-trash-alt" style="font-size: 20px"></i></a>
-                </div>
-              </div>
-            </td>
-            
-                <div class="cart-btn">
-                    <!--Sub button-->
-                    <form action="/" method="POST">
-                        {% csrf_token %}
-                        <input hidden type="text" name="product" value="{{product.id}}" />
-                            <input hidden type="number" name="remove" value="-1" />
-                            <span><button type="submit" class="min-btn">-</button></span>
-                    </form>
-                    <!--Add button-->
-                    <form action="/" method="POST">
-                        {% csrf_token %}
-                        <input hidden type="text" name="product" value="{{product.id}}" />
-                            <span><button type="submit" class="add-btn">+</button></span>
-                    </form>
-                </div>
-            </td>
-            
-          </tr>
+            <tr>
+              <td>
+                <div class="prod-info">
+                  <div class="prod-img mb-1">
+                    <img src="{{ product.product.product_main_image.url }}" alt="">
+                  </div>
 
+                  <div class="prod-name ml-2">
+                    <div class="prod-desc">
+                      <h5>{{ product.product.name|truncatewords:2 }}</h5>
+                      <h5></h5>
+                    </div>
+
+                    <div class="prod-delete-btn">
+                      <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="qty-section">
+                <div class="prod-qty">
+                  <div class="qty-btn-section">
+                    <form action="/" method="POST">{% csrf_token %}
+                      <input hidden type="number" name="remove" value="-1" />
+                      <input type="submit" value="-">
+                    </form>
+                  </div>
+                  <div class="quantity">
+                    <h5>{{ product.qty }}</h5>
+                  </div>
+                  <div class="qty-btn-section">
+                    <form action="/" method="POST">{% csrf_token %}
+                      <input hidden type="text" name="product" value="{{product.id}}" />
+                      <input type="submit" value="+">
+                    </form>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <p class="text-center prod-uom">{{ product.uom.title }}</p>
+              </td>
+              <td>
+                <h5 class="prod-price">MYR. {{ product.product.price|mul:product.qty }}</h5>
+              </td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
 
       <div class="total-price">
         <table class="mb-3">
-          <!--<tr>-->
-          <!--  <td class="font-weight-bold">Subtotal</td>-->
-          <!--  <td class="font-weight-bold">100000 Tk</td>-->
-          <!--</tr>-->
           <tr>
-            <td class="font-weight-bold cart-total-price">TOTAL</td>
-            <td class="font-weight-bold">{{cart.total}} RM.</td>
+            <td class="font-weight-bold text-danger cart-total-price">TOTAL</td>
+            <td class="font-weight-bold cart-total">MYR. {{cart.total}}</td>
           </tr>
           <tr>
               {% if request.session.customer %}
@@ -77,10 +89,11 @@
           </tr>
         </table>
       </div>
-      {% else %}
-      <h4 class="py-3 text-center">Your cart is empty!</h4>
-      {% endif %}
     </div>
+  {% else %}
+  <div class="card p-3">
+    <h4 class="text-center">Your cart is empty!</h4>
   </div>
+  {% endif %}
 </div>
 {% endblock %}
