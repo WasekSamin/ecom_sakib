@@ -128,18 +128,9 @@ class Checkout(View):
 
 
     def get(self, request):
-        # args = {}
-        # if request.session.get('cart') is not None:
-        #     ids = list(request.session.get('cart').keys())
-        #     cart_products = Product.get_products_id(ids)
-        #     product_prices = list(map(self.map_function, cart_products))
-        #     total = sum(product_prices)
-        #     cities = City.objects.all()
-        #     deliveries = DeliveryMethod.objects.all()
-        #     args = {'cart_products':cart_products, 'total': total, "cities": cities, "deliveries": deliveries}
-        # return render(self.request, 'Store/checkout.html', args)
-        cart_products = Cart.objects.get_or_new(request=request)
-        args = {'cart_products': cart_products, 'cart_items': cart_products.cartitem_set.all()}
+        cart = Cart.objects.get_or_new(request=request)
+
+        args = {'cart': cart, 'cart_items':cart.cartitem_set.all()}
         return render(self.request, 'Store/checkout.html', args)
 
     def post(self, request):
